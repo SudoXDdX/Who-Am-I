@@ -3,7 +3,7 @@
 Read this first. It tells you where the project stands and what to do
 next, without needing to reconstruct context from scratch.
 
-## Current state: post-GLM-review build
+## Current state: post-GLM-review-2 build
 
 - `npm run build` succeeds — static export via `output: "export"`, all
   22 routes prerender cleanly (2 locales × 11 routes: home, about,
@@ -18,6 +18,9 @@ next, without needing to reconstruct context from scratch.
   should work as-is once the repo has GitHub Pages set to "GitHub
   Actions" as the source, but **has not been tested against a live
   GitHub Pages deployment** — that's the first thing worth verifying.
+- **Root redirect now respects `NEXT_PUBLIC_BASE_PATH`** (fixed 2026-08-31
+  by GLM Pass 2). Previously, the `/` redirect would break on project
+  page deployments. Verified with `NEXT_PUBLIC_BASE_PATH=/Who-Am-I`.
 
 ## Features complete
 
