@@ -32,18 +32,10 @@ function getInitialTheme(): { mode: ColorMode; color: ColorScheme } {
 }
 
 export function ThemeToggle({ locale }: { locale: "pt" | "en" }) {
-  const [mode, setMode] = useState<ColorMode>("dark");
-  const [color, setColor] = useState<ColorScheme>("blue");
+  const [mode, setMode] = useState<ColorMode>(() => getInitialTheme().mode);
+  const [color, setColor] = useState<ColorScheme>(() => getInitialTheme().color);
   const [showPicker, setShowPicker] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
-
-  // Initialize theme on mount
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    const { mode: m, color: c } = getInitialTheme();
-    setMode(m);
-    setColor(c);
-  }, []);
 
   // Apply theme when mode or color changes
   useEffect(() => {
