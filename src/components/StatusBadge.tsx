@@ -1,12 +1,12 @@
 import type { ProjectStatus } from "@/content/projects";
 
 const statusStyles: Record<ProjectStatus, string> = {
-  idea: "border-[var(--color-border)] text-[var(--color-text-muted)]",
-  prototype: "border-[var(--color-amber)]/50 text-[var(--color-amber)]",
-  research: "border-[var(--color-amber)]/50 text-[var(--color-amber)]",
-  active: "border-[var(--color-accent)]/50 text-[var(--color-accent)]",
-  delivered: "border-[var(--color-accent)]/50 text-[var(--color-accent)]",
-  parked: "border-[var(--color-border)] text-[var(--color-text-muted)]",
+  idea: "status-idea",
+  prototype: "status-prototype",
+  research: "status-research",
+  active: "status-active",
+  delivered: "status-delivered",
+  parked: "status-parked",
 };
 
 export function StatusBadge({
@@ -17,9 +17,7 @@ export function StatusBadge({
   label: string;
 }) {
   return (
-    <span
-      className={`inline-flex items-center rounded-full border px-2.5 py-0.5 font-mono text-xs ${statusStyles[status]}`}
-    >
+    <span className={`status-badge ${statusStyles[status]}`}>
       {label}
     </span>
   );

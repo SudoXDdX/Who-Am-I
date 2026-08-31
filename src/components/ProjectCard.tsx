@@ -3,6 +3,7 @@ import type { Locale } from "@/lib/i18n";
 import type { Project } from "@/content/projects";
 import { getDictionary } from "@/content/dictionary";
 import { StatusBadge } from "@/components/StatusBadge";
+import { NeonCard } from "@/components/NeonCard";
 
 export function ProjectCard({
   project,
@@ -14,26 +15,21 @@ export function ProjectCard({
   const dict = getDictionary(locale);
 
   return (
-    <article className="border-b border-[var(--color-border)] py-8 first:pt-0 last:border-b-0">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3 className="text-xl font-semibold text-[var(--color-text)]">
-          {project.title}
-        </h3>
+    <NeonCard className="p-6">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <h3 className="project-card-title">{project.title}</h3>
         <StatusBadge
           status={project.status}
           label={dict.projects.statusLabels[project.status]}
         />
       </div>
-      <p className="mt-3 text-[var(--color-text-muted)]">
+      <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-sec)]">
         {project.summary[locale]}
       </p>
       {project.technologies.length > 0 && (
-        <ul className="mt-4 flex flex-wrap gap-2">
+        <ul className="mt-4 flex flex-wrap gap-1.5">
           {project.technologies.map((tech) => (
-            <li
-              key={tech}
-              className="rounded border border-[var(--color-border)] px-2 py-0.5 font-mono text-xs text-[var(--color-text-muted)]"
-            >
+            <li key={tech} className="project-card-tech">
               {tech}
             </li>
           ))}
@@ -42,11 +38,15 @@ export function ProjectCard({
       {project.story && (
         <Link
           href={`/${locale}/projects/${project.slug}/`}
-          className="mt-4 inline-block font-mono text-sm text-[var(--color-accent)] underline underline-offset-4"
+          className="project-card-link mt-5 inline-block"
         >
           {dict.projects.readMore}
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M5 12h14" />
+            <path d="m12 5 7 7-7 7" />
+          </svg>
         </Link>
       )}
-    </article>
+    </NeonCard>
   );
 }

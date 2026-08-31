@@ -3,6 +3,7 @@ import { isLocale, localeParams, type Locale } from "@/lib/i18n";
 import { getDictionary } from "@/content/dictionary";
 import { stackCategories } from "@/content/stack";
 import { SectionHeading } from "@/components/SectionHeading";
+import { ScrollReveal } from "@/components/ScrollReveal";
 
 export function generateStaticParams() {
   return localeParams();
@@ -19,27 +20,28 @@ export default async function StackPage({
   const dict = getDictionary(locale);
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-16">
-      <SectionHeading kicker={dict.stack.kicker} title={dict.stack.title} />
-      <p className="mb-12 max-w-xl text-[var(--color-text-muted)]">{dict.stack.intro}</p>
+    <div className="page-content">
+      <ScrollReveal>
+        <SectionHeading kicker={dict.stack.kicker} title={dict.stack.title} />
+      </ScrollReveal>
+      <ScrollReveal delay={100}>
+        <p className="section-description mb-12">{dict.stack.intro}</p>
+      </ScrollReveal>
 
       <div className="space-y-10">
-        {stackCategories.map((category) => (
-          <div key={category.id}>
-            <h2 className="font-mono text-sm text-[var(--color-accent)]">
-              {category.label[locale]}
-            </h2>
-            <ul className="mt-3 flex flex-wrap gap-2">
-              {category.items.map((item) => (
-                <li
-                  key={item}
-                  className="rounded border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-sm text-[var(--color-text)]"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
+        {stackCategories.map((category, catIndex) => (
+          <ScrollReveal key={category.id} delay={150 + catIndex * 80}>
+            <div>
+              <h2 className="stack-category-label">{category.label[locale]}</h2>
+              <ul className="mt-3 flex flex-wrap gap-2">
+                {category.items.map((item) => (
+                  <li key={item} className="stack-tag">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </ScrollReveal>
         ))}
       </div>
     </div>

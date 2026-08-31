@@ -4,6 +4,7 @@ import { getDictionary } from "@/content/dictionary";
 import { labEntries } from "@/content/lab";
 import { SectionHeading } from "@/components/SectionHeading";
 import { LabCard } from "@/components/LabCard";
+import { ScrollReveal } from "@/components/ScrollReveal";
 
 export function generateStaticParams() {
   return localeParams();
@@ -20,13 +21,19 @@ export default async function LabPage({
   const dict = getDictionary(locale);
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-16">
-      <SectionHeading kicker={dict.lab.kicker} title={dict.lab.title} />
-      <p className="mb-12 max-w-xl text-[var(--color-text-muted)]">{dict.lab.intro}</p>
+    <div className="page-content page-content-wide">
+      <ScrollReveal>
+        <SectionHeading kicker={dict.lab.kicker} title={dict.lab.title} />
+      </ScrollReveal>
+      <ScrollReveal delay={100}>
+        <p className="section-description mb-12">{dict.lab.intro}</p>
+      </ScrollReveal>
 
       <div className="grid gap-6 sm:grid-cols-2">
-        {labEntries.map((entry) => (
-          <LabCard key={entry.id} entry={entry} locale={locale} />
+        {labEntries.map((entry, index) => (
+          <ScrollReveal key={entry.id} delay={150 + index * 100}>
+            <LabCard entry={entry} locale={locale} />
+          </ScrollReveal>
         ))}
       </div>
     </div>

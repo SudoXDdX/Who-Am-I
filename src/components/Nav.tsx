@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
 import { otherLocale } from "@/lib/i18n";
@@ -6,6 +9,16 @@ import { getDictionary } from "@/content/dictionary";
 export function Nav({ locale }: { locale: Locale }) {
   const dict = getDictionary(locale);
   const alt = otherLocale(locale);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    function onScroll() {
+      setScrolled(window.scrollY > 20);
+    }
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const links = [
     { href: `/${locale}/`, label: dict.nav.home },
@@ -18,61 +31,53 @@ export function Nav({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <header className="border-b border-[var(--color-border)]">
+    <header className={`nav-glass ${scrolled ? "scrolled" : ""}`}>
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-[var(--color-accent)] focus:px-3 focus:py-2 focus:text-[#06110f]"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[200] focus:rounded-lg focus:bg-[var(--color-primary)] focus:px-3 focus:py-2 focus:text-[var(--color-bg)] focus:font-medium"
       >
         {dict.nav.skipToContent}
       </a>
-      <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
+      <div className="nav-glass-inner">
         <Link
           href={`/${locale}/`}
-          className="font-mono text-sm tracking-tight text-[var(--color-text)]"
+          className="font-mono text-sm tracking-tight text-[var(--color-text)] transition-colors hover:text-[var(--color-primary)]"
         >
-          whoami<span className="text-[var(--color-accent)]">{"//"}</span>SuXD
+          whoami<span className="text-[var(--color-primary)]">{"//"}</span>SuXD
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
           {links.slice(1).map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="font-mono text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-accent)]"
-            >
+            <Link key={link.href} href={link.href} className="nav-link">
               {link.label}
             </Link>
           ))}
-          <Link
-            href={`/${alt}/`}
-            aria-label={dict.nav.langSwitchAria}
-            className="rounded border border-[var(--color-border)] px-2 py-1 font-mono text-xs text-[var(--color-text-muted)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-          >
+          <Link href={`/${alt}/`} aria-label={dict.nav.langSwitchAria} className="nav-lang-btn">
             {dict.nav.langLabel}
           </Link>
         </nav>
 
         <details className="relative md:hidden">
           <summary
-            className="cursor-pointer list-none rounded border border-[var(--color-border)] px-3 py-1.5 font-mono text-xs text-[var(--color-text-muted)]"
+            className="cursor-pointer list-none rounded-lg border border-[var(--color-border)] px-3 py-1.5 font-mono text-xs text-[var(--color-text-sec)]"
             aria-label="Menu"
           >
             menu
           </summary>
-          <div className="absolute right-0 z-50 mt-2 w-44 rounded border border-[var(--color-border)] bg-[var(--color-surface)] p-2 shadow-lg">
-            <nav className="flex flex-col gap-1" aria-label="Primary">
+          <div className="nav-mobile-panel">
+            <nav className="flex flex-col gap-0.5" aria-label="Primary">
               {links.slice(1).map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="rounded px-2 py-1.5 font-mono text-sm text-[var(--color-text-muted)] hover:bg-[var(--color-surface-2)] hover:text-[var(--color-accent)]"
+                  className="nav-link"
                 >
                   {link.label}
                 </Link>
               ))}
               <Link
                 href={`/${alt}/`}
-                className="mt-1 rounded border border-[var(--color-border)] px-2 py-1.5 font-mono text-sm text-[var(--color-text-muted)]"
+                className="nav-lang-btn mt-1 justify-center"
               >
                 {dict.nav.langLabel}
               </Link>

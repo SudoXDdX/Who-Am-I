@@ -4,6 +4,9 @@ import { isLocale, localeParams, type Locale } from "@/lib/i18n";
 import { getDictionary } from "@/content/dictionary";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
+import { BackgroundCanvas } from "@/components/BackgroundCanvas";
+import { ScrollProgress } from "@/components/ScrollProgress";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 export function generateStaticParams() {
   return localeParams();
@@ -61,6 +64,9 @@ export default async function LocaleLayout({
 
   return (
     <div lang={locale === "pt" ? "pt-BR" : "en"} className="flex min-h-screen flex-col">
+      <BackgroundCanvas />
+      <ScrollProgress />
+      <ScrollToTop />
       <Nav locale={locale} />
       <main id="main" className="flex-1">
         {children}

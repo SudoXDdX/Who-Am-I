@@ -1,16 +1,23 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
+import { Plus_Jakarta_Sans, Syne, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const plexSans = IBM_Plex_Sans({
+const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
 });
 
-const plexMono = IBM_Plex_Mono({
+const syne = Syne({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  variable: "--font-heading",
+  display: "swap",
+  weight: ["700", "800"],
+});
+
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
   variable: "--font-mono",
   display: "swap",
 });
@@ -27,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" suppressHydrationWarning className={`${plexSans.variable} ${plexMono.variable}`}>
+    <html lang="pt-BR" suppressHydrationWarning className={`${jakarta.variable} ${syne.variable} ${jetbrains.variable}`}>
       <body className="antialiased">{children}</body>
     </html>
   );

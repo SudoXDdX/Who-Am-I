@@ -4,6 +4,7 @@ import { getDictionary } from "@/content/dictionary";
 import { getTimeline } from "@/content/timeline";
 import { SectionHeading } from "@/components/SectionHeading";
 import { TimelineList } from "@/components/TimelineList";
+import { ScrollReveal } from "@/components/ScrollReveal";
 
 export function generateStaticParams() {
   return localeParams();
@@ -21,9 +22,13 @@ export default async function TimelinePage({
   const entries = getTimeline(locale);
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-16">
-      <SectionHeading kicker={dict.timeline.kicker} title={dict.timeline.title} />
-      <p className="mb-12 max-w-xl text-[var(--color-text-muted)]">{dict.timeline.intro}</p>
+    <div className="page-content">
+      <ScrollReveal>
+        <SectionHeading kicker={dict.timeline.kicker} title={dict.timeline.title} />
+      </ScrollReveal>
+      <ScrollReveal delay={100}>
+        <p className="section-description mb-12">{dict.timeline.intro}</p>
+      </ScrollReveal>
       <TimelineList entries={entries} locale={locale} />
     </div>
   );
