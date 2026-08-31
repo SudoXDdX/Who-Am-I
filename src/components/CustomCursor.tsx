@@ -7,15 +7,20 @@ export function CustomCursor() {
   const ringRef = useRef<HTMLDivElement>(null);
   const posRef = useRef({ x: -100, y: -100 });
   const ringPosRef = useRef({ x: -100, y: -100 });
+  const velRef = useRef({ x: 0, y: 0 });
   const rafRef = useRef(0);
 
   useEffect(() => {
     if (!window.matchMedia("(pointer: fine)").matches) return;
     if (!dotRef.current || !ringRef.current) return;
 
-    // TypeScript doesn't narrow refs in closures — use local non-null bindings
     const dot = dotRef.current;
     const ring = ringRef.current;
+
+    // Spring physics constants (Material Expressive 3 inspired)
+    const STIFFNESS = 0.12;
+    const DAMPING = 0.72;
+    const MASS = 1;
 
     function onMouseMove(e: MouseEvent) {
       posRef.current = { x: e.clientX, y: e.clientY };
@@ -25,6 +30,8 @@ export function CustomCursor() {
 
     function onMouseDown() {
       ring.classList.add("clicking");
+      // Boost spring on press for satisfying snap
+      velRef.current = { x: 0, y: 0 };
     }
 
     function onMouseUp() {
@@ -62,12 +69,20 @@ export function CustomCursor() {
     }
 
     function animateRing() {
+      // Spring physics: F = -kx - dv
       const dx = posRef.current.x - ringPosRef.current.x;
       const dy = posRef.current.y - ringPosRef.current.y;
-      ringPosRef.current.x += dx * 0.15;
-      ringPosRef.current.y += dy * 0.15;
+
+      // Apply spring force + damping
+      velRef.current.x = (velRef.current.x + dx * STIFFNESS) * DAMPING;
+      velRef.current.y = (velRef.current.y + dy * STIFFNESS) * DAMPING;
+
+      ringPosRef.current.x += velRef.current.x;
+      ringPosRef.current.y += velRef.current.y;
+
       ring.style.left = `${ringPosRef.current.x}px`;
       ring.style.top = `${ringPosRef.current.y}px`;
+
       rafRef.current = requestAnimationFrame(animateRing);
     }
 
