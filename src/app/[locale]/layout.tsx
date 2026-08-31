@@ -4,9 +4,10 @@ import { isLocale, localeParams, type Locale } from "@/lib/i18n";
 import { getDictionary } from "@/content/dictionary";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
-import { BackgroundCanvas } from "@/components/BackgroundCanvas";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { CustomCursor } from "@/components/CustomCursor";
+import { Ripple } from "@/components/Ripple";
 
 export function generateStaticParams() {
   return localeParams();
@@ -64,7 +65,12 @@ export default async function LocaleLayout({
 
   return (
     <div lang={locale === "pt" ? "pt-BR" : "en"} className="flex min-h-screen flex-col">
-      <BackgroundCanvas />
+      {/* BG Shapes */}
+      <div className="bg-shape" aria-hidden="true" />
+      <div className="bg-shape-2" aria-hidden="true" />
+      <div className="bg-shape-3" aria-hidden="true" />
+      <CustomCursor />
+      <Ripple />
       <ScrollProgress />
       <ScrollToTop />
       <Nav locale={locale} />

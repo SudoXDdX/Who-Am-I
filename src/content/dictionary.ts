@@ -145,9 +145,11 @@ export const dictionary = {
     contact: {
       kicker: "contato",
       title: "Entre em contato",
-      intro: "GitHub é o melhor lugar para conversar sobre projetos, colaborações ou reportar algo.",
+      intro: "GitHub é o melhor lugar para conversar sobre projetos, colaborações ou reportar algo. Para contato direto, use o email.",
       githubLabel: "GitHub",
       githubDesc: "Código-fonte, issues e pull requests.",
+      emailLabel: "Email",
+      emailDesc: "Para contato direto, colaborações ou qualquer conversa.",
     },
   },
   en: {
@@ -294,9 +296,11 @@ export const dictionary = {
     contact: {
       kicker: "contact",
       title: "Get in touch",
-      intro: "GitHub is the best place to reach out about projects, collaborations, or to report anything.",
+      intro: "GitHub is the best place to reach out about projects, collaborations, or to report anything. For direct contact, use email.",
       githubLabel: "GitHub",
       githubDesc: "Source code, issues and pull requests.",
+      emailLabel: "Email",
+      emailDesc: "For direct contact, collaborations, or just a chat.",
     },
   },
 } as const;

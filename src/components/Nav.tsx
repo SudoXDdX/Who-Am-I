@@ -21,13 +21,13 @@ export function Nav({ locale }: { locale: Locale }) {
   }, []);
 
   const links = [
-    { href: `/${locale}/`, label: dict.nav.home },
-    { href: `/${locale}/about/`, label: dict.nav.about },
-    { href: `/${locale}/timeline/`, label: dict.nav.timeline },
-    { href: `/${locale}/projects/`, label: dict.nav.projects },
-    { href: `/${locale}/stack/`, label: dict.nav.stack },
-    { href: `/${locale}/lab/`, label: dict.nav.lab },
-    { href: `/${locale}/contact/`, label: dict.nav.contact },
+    { href: `/${locale}/`, label: dict.nav.home, icon: "home" },
+    { href: `/${locale}/about/`, label: dict.nav.about, icon: "person" },
+    { href: `/${locale}/timeline/`, label: dict.nav.timeline, icon: "timeline" },
+    { href: `/${locale}/projects/`, label: dict.nav.projects, icon: "folder_special" },
+    { href: `/${locale}/stack/`, label: dict.nav.stack, icon: "code" },
+    { href: `/${locale}/lab/`, label: dict.nav.lab, icon: "science" },
+    { href: `/${locale}/contact/`, label: dict.nav.contact, icon: "mail" },
   ];
 
   return (
@@ -41,18 +41,26 @@ export function Nav({ locale }: { locale: Locale }) {
       <div className="nav-glass-inner">
         <Link
           href={`/${locale}/`}
-          className="font-mono text-sm tracking-tight text-[var(--color-text)] transition-colors hover:text-[var(--color-primary)]"
+          className="flex items-center gap-1.5 text-sm font-semibold tracking-tight text-[var(--color-text)] transition-colors hover:text-[var(--color-primary)]"
         >
-          whoami<span className="text-[var(--color-primary)]">{"//"}</span>SuXD
+          <span className="material-symbols-outlined icon-primary" style={{ fontSize: 20 }}>
+            terminal
+          </span>
+          <span className="font-mono text-xs">
+            whoami<span className="text-[var(--color-primary)]">//</span>
+          </span>
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-0.5 md:flex" aria-label="Primary">
           {links.slice(1).map((link) => (
             <Link key={link.href} href={link.href} className="nav-link">
               {link.label}
             </Link>
           ))}
           <Link href={`/${alt}/`} aria-label={dict.nav.langSwitchAria} className="nav-lang-btn">
+            <span className="material-symbols-outlined" style={{ fontSize: 14 }}>
+              translate
+            </span>
             {dict.nav.langLabel}
           </Link>
         </nav>
@@ -62,7 +70,9 @@ export function Nav({ locale }: { locale: Locale }) {
             className="cursor-pointer list-none rounded-lg border border-[var(--color-border)] px-3 py-1.5 font-mono text-xs text-[var(--color-text-sec)]"
             aria-label="Menu"
           >
-            menu
+            <span className="material-symbols-outlined" style={{ fontSize: 18 }}>
+              menu
+            </span>
           </summary>
           <div className="nav-mobile-panel">
             <nav className="flex flex-col gap-0.5" aria-label="Primary">
@@ -70,8 +80,11 @@ export function Nav({ locale }: { locale: Locale }) {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="nav-link"
+                  className="nav-link flex items-center gap-2"
                 >
+                  <span className="material-symbols-outlined icon-text-muted" style={{ fontSize: 16 }}>
+                    {link.icon}
+                  </span>
                   {link.label}
                 </Link>
               ))}
@@ -79,6 +92,9 @@ export function Nav({ locale }: { locale: Locale }) {
                 href={`/${alt}/`}
                 className="nav-lang-btn mt-1 justify-center"
               >
+                <span className="material-symbols-outlined" style={{ fontSize: 14 }}>
+                  translate
+                </span>
                 {dict.nav.langLabel}
               </Link>
             </nav>
