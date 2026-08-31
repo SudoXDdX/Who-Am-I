@@ -37,12 +37,22 @@ export function ThemeToggle({ locale }: { locale: "pt" | "en" }) {
   const [showPicker, setShowPicker] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
 
+  // Initialize theme on mount
   useEffect(() => {
     const { mode: m, color: c } = getInitialTheme();
     setMode(m);
     setColor(c);
-    applyTheme(m, c);
   }, []);
+
+  // Apply theme when mode or color changes
+  useEffect(() => {
+    const root = document.documentElement;
+    root.setAttribute("data-mode", mode);
+    root.setAttribute("data-color", color);
+    root.style.colorScheme = mode;
+    localStorage.setItem("theme-mode", mode);
+    localStorage.setItem("theme-color", color);
+  }, [mode, color]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -54,31 +64,14 @@ export function ThemeToggle({ locale }: { locale: "pt" | "en" }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  function applyTheme(m: ColorMode, c: ColorScheme) {
-    const root = document.documentElement;
-    root.setAttribute("data-mode", m);
-    root.setAttribute("data-color", c);
-    root.style.colorScheme = m;
-    localStorage.setItem("theme-mode", m);
-    localStorage.setItem("theme-color", c);
-  }
-
   const toggleMode = useCallback(() => {
-    setMode((prev) => {
-      const next = prev === "dark" ? "light" : "dark";
-      setColor((c) => {
-        applyTheme(next, c);
-        return c;
-      });
-      return next;
-    });
+    setMode((prev) => (prev === "dark" ? "light" : "dark"));
   }, []);
 
   const pickColor = useCallback((c: ColorScheme) => {
     setColor(c);
-    applyTheme(mode, c);
     setShowPicker(false);
-  }, [mode]);
+  }, []);
 
   return (
     <div className="theme-toggle-wrapper" ref={panelRef}>
