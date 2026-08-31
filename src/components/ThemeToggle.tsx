@@ -38,6 +38,7 @@ export function ThemeToggle({ locale }: { locale: "pt" | "en" }) {
   const panelRef = useRef<HTMLDivElement>(null);
 
   // Initialize theme on mount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const { mode: m, color: c } = getInitialTheme();
     setMode(m);
