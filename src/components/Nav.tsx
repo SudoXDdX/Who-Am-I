@@ -47,7 +47,7 @@ export function Nav({ locale }: { locale: Locale }) {
             terminal
           </span>
           <span className="font-mono text-xs">
-            whoami<span className="text-[var(--color-primary)]">//</span>
+            whoami<span className="text-[var(--color-primary)]">{'//'}</span>
           </span>
         </Link>
 

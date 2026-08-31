@@ -27,7 +27,7 @@ export function Footer({ locale }: { locale: Locale }) {
                 terminal
               </span>
               <span className="font-mono text-xs">
-                whoami<span className="text-[var(--color-primary)]">//</span>
+                whoami<span className="text-[var(--color-primary)]">{'//'}</span>
               </span>
             </p>
             <p className="mt-3 max-w-xs text-xs leading-relaxed text-[var(--color-text-muted)]">
