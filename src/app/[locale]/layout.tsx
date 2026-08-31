@@ -8,7 +8,6 @@ import { ScrollProgress } from "@/components/ScrollProgress";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { CustomCursor } from "@/components/CustomCursor";
 import { Ripple } from "@/components/Ripple";
-import { MusicPlayer } from "@/components/MusicPlayer";
 
 export function generateStaticParams() {
   return localeParams();
@@ -79,7 +78,6 @@ export default async function LocaleLayout({
         {children}
       </main>
       <Footer locale={locale} />
-      <MusicPlayer locale={locale} />
     </div>
   );
 }

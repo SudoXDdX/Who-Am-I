@@ -35,18 +35,33 @@ export function ProjectCard({
           ))}
         </ul>
       )}
-      {project.story && (
-        <Link
-          href={`/${locale}/projects/${project.slug}/`}
-          className="project-card-link mt-5 inline-block"
-        >
-          {dict.projects.readMore}
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M5 12h14" />
-            <path d="m12 5 7 7-7 7" />
-          </svg>
-        </Link>
-      )}
+      <div className="mt-5 flex flex-wrap items-center gap-4">
+        {project.github && (
+          <a
+            href={project.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="project-card-link"
+          >
+            <span className="material-symbols-outlined" style={{ fontSize: 15 }}>
+              open_in_new
+            </span>
+            GitHub
+          </a>
+        )}
+        {project.story && (
+          <Link
+            href={`/${locale}/projects/${project.slug}/`}
+            className="project-card-link"
+          >
+            {dict.projects.readMore}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </Link>
+        )}
+      </div>
     </NeonCard>
   );
 }

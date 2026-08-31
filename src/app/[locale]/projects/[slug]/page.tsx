@@ -62,6 +62,22 @@ export default async function ProjectDetailPage({
         <p className="mt-4 text-[var(--color-text-sec)] leading-relaxed">{project.summary[locale]}</p>
       </ScrollReveal>
 
+      {project.github && (
+        <ScrollReveal delay={140}>
+          <a
+            href={project.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-ghost mt-4 inline-flex text-sm"
+          >
+            <span className="material-symbols-outlined" style={{ fontSize: 16 }}>
+              open_in_new
+            </span>
+            GitHub
+          </a>
+        </ScrollReveal>
+      )}
+
       <ScrollReveal delay={160}>
         <NeonCard className="mt-6 p-5">
           <dl className="grid gap-4 text-sm sm:grid-cols-3">

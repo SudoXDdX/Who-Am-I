@@ -25,12 +25,114 @@ export interface Project {
   role: { pt: string; en: string };
   period: { pt: string; en: string };
   technologies: string[];
+  github?: string;
   story?: ProjectStory;
   securityNote?: boolean;
   pending?: boolean;
 }
 
 export const projects: Project[] = [
+  {
+    slug: "root-my-galaxy",
+    title: "Root-My-Galaxy (SM-a576b)",
+    summary: {
+      pt: "Fork do app Root-My-Galaxy portado para dar suporte ao Galaxy A57 5G (SM-A576B). App Android em Kotlin/Jetpack Compose que automatiza o processo de root via KernelSU usando o exploit CVE-2026-43499 (Ghost Lock), com detecção automática de dispositivo, download verificado de payloads e interface Material Expressive 3.",
+      en: "Fork of the Root-My-Galaxy app ported to support the Galaxy A57 5G (SM-A576B). Android app in Kotlin/Jetpack Compose that automates KernelSU rooting via the CVE-2026-43499 (Ghost Lock) exploit, with automatic device detection, verified payload downloads and a Material Expressive 3 interface.",
+    },
+    status: "active",
+    role: {
+      pt: "Port, adaptação do app e do pipeline de build para o A57 5G",
+      en: "Port, app adaptation and build pipeline for the A57 5G",
+    },
+    period: { pt: "2025 – presente", en: "2025 – present" },
+    technologies: [
+      "Kotlin",
+      "Jetpack Compose",
+      "Material 3 (Expressive)",
+      "materialkolor",
+      "KernelSU",
+      "Android NDK (C)",
+      "Shizuku",
+      "GitHub Actions",
+    ],
+    github: "https://github.com/SudoXDdX/Root-My-Galaxy-SM-a576b",
+    story: {
+      context: {
+        pt: "O Root-My-Galaxy é um app open-source que facilita o root com KernelSU em Galaxys Samsung usando o exploit CVE-2026-43499 (Ghost Lock). O projeto original cobre S23/S24/S25 e alguns A-series, mas o Galaxy A57 5G (SM-A576B) com kernel 6.12.38 não tinha suporte nenhum — nem no app, nem nos payloads.",
+        en: "Root-My-Galaxy is an open-source app that makes KernelSU rooting easy on Samsung Galaxys using the CVE-2026-43499 (Ghost Lock) exploit. The original project covers S23/S24/S25 and some A-series devices, but the Galaxy A57 5G (SM-A576B) on kernel 6.12.38 had zero support — neither in the app nor in the payloads.",
+      },
+      problem: {
+        pt: "O A57 usa um kernel diferente (6.12.38 vs 6.6.x ou 5.15.x dos outros devices), precisando de um módulo KernelSU compilado especificamente pra esse kernel, um exploit adaptado, e o app precisava reconhecer o modelo e apontar pro repositório de payloads correto (o meu fork). Além disso, o desenvolvimento foi feito em grande parte no próprio A57, via Termux e PC — sem emulador.",
+        en: "The A57 uses a different kernel (6.12.38 vs 6.6.x or 5.15.x on other devices), requiring a KernelSU module compiled specifically for that kernel, an adapted exploit, and the app needed to recognize the model and point to the correct payloads repo (my fork). On top of that, development was mostly done on the A57 itself, via Termux and PC — no emulator.",
+      },
+      exploration: {
+        pt: "Comecei estudando como o app original resolve devices: o SupportManifest parseia um targets-v3.json com perfis de dispositivo, versões de kernel suportadas, e URLs de download pinadas por commit SHA. Cada device precisa de um exploit .so e um binário ksud compilados pro kernel específico. A questão era: compilar o KernelSU pro 6.12.38 do A57, gerar o exploit correto, e fazer o app reconhecer tudo isso.",
+        en: "I started by studying how the original app resolves devices: the SupportManifest parses a targets-v3.json with device profiles, supported kernel versions, and download URLs pinned by commit SHA. Each device needs an exploit .so and a ksud binary compiled for the specific kernel. The question was: compile KernelSU for the A57's 6.12.38, generate the correct exploit, and make the app recognize all of it.",
+      },
+      build: {
+        pt: "O fork do app foi adaptado para apontar pro meu repositório de payloads (com profiles do A57 e outros devices). O payload repo usa um schema versionado (v3) com verificação de tamanho por artefato e pin de commit. O KernelSU foi compilado com um patch custom que desabilita RKP/DEFEX no kernel Samsung via KDP. O app usa MaterialExpressiveTheme com MotionScheme.expressive(), geração de paleta via materialkolor (PaletteStyle.TonalSpot, SPEC_2025), e suporte a 11 idiomas. A interface tem步骤 visuais de instalação (verificação → download → exploit → KernelSU) com haptic feedback e auto-scroll de log.",
+        en: "The app fork was adapted to point to my payloads repository (with A57 profiles and other devices). The payload repo uses a versioned schema (v3) with per-artifact size verification and commit pinning. KernelSU was compiled with a custom patch that disables RKP/DEFEX on the Samsung kernel via KDP. The app uses MaterialExpressiveTheme with MotionScheme.expressive(), palette generation via materialkolor (PaletteStyle.TonalSpot, SPEC_2025), and support for 11 languages. The UI has visual installation steps (check → download → exploit → KernelSU) with haptic feedback and auto-scrolling log.",
+      },
+      result: {
+        pt: "O app reconhece o A57 5G automaticamente, baixa os payloads verificados do meu repo, e aplica o exploit. O root via KernelSU funciona na RAM — reboot remove, mas é só rodar de novo. O repo de payloads cobre 10 dispositivos além do A57, incluindo S25 série, Z Fold 7, S24 série e A56/A36.",
+        en: "The app recognizes the A57 5G automatically, downloads verified payloads from my repo, and applies the exploit. The KernelSU root works in RAM — a reboot removes it, but you just run it again. The payloads repo covers 10 devices beyond the A57, including the S25 series, Z Fold 7, S24 series and A56/A36.",
+      },
+      lessons: {
+        pt: "Trabalhar dentro das limitações do próprio dispositivo que você está portando te força a entender o sistema de forma muito mais íntima. Cada erro de compilação, cada crash do exploit, cada mismatch de versão ensina algo que um emulador jamais ensinaria. E pinar artefatos por commit SHA não é paranoia — é o mínimo pra garantir que quem baixa recebe exatamente o que foi testado.",
+        en: "Working within the limitations of the device you're porting to forces you to understand the system much more intimately. Every compilation error, every exploit crash, every version mismatch teaches you something an emulator never would. And pinning artifacts by commit SHA isn't paranoia — it's the minimum to guarantee that whoever downloads gets exactly what was tested.",
+      },
+    },
+  },
+  {
+    slug: "root-my-galaxy-payloads",
+    title: "Root-My-Galaxy-Payloads (SM-a576b)",
+    summary: {
+      pt: "Repositório de payloads para o Root-My-Galaxy: módulos KernelSU pré-compilados, exploits binários e um sistema de manifesto versionado com verificação de integridade. Suporta 11 dispositivos Samsung incluindo o Galaxy A57 5G portado do zero.",
+      en: "Payload repository for Root-My-Galaxy: pre-compiled KernelSU modules, binary exploits and a versioned manifest system with integrity verification. Supports 11 Samsung devices including the Galaxy A57 5G ported from scratch.",
+    },
+    status: "active",
+    role: {
+      pt: "Compilação de KernelSU, build de exploits, manutenção do manifesto de targets",
+      en: "KernelSU compilation, exploit builds, targets manifest maintenance",
+    },
+    period: { pt: "2025 – presente", en: "2025 – present" },
+    technologies: [
+      "KernelSU",
+      "Linux Kernel (6.12 / 6.6 / 6.1 / 5.15)",
+      "Samsung KDP",
+      "RKP / DEFEX",
+      "C / NDK",
+      "Makefile",
+      "Python (audit tooling)",
+    ],
+    github: "https://github.com/SudoXDdX/Root-My-Galaxy-Payloads-SM-a576b",
+    story: {
+      context: {
+        pt: "O repo de payloads é a peça central que o app consome: ele hospeda os binários compilados (exploit .so + ksud) e um manifesto JSON (targets-v3.json) que o app usa pra descobrir qual payload baixar pra cada device. Sem esse repo, o app é só uma interface vazia.",
+        en: "The payloads repo is the central piece the app consumes: it hosts the compiled binaries (exploit .so + ksud) and a JSON manifest (targets-v3.json) that the app uses to discover which payload to download for each device. Without this repo, the app is just an empty interface.",
+      },
+      problem: {
+        pt: "Cada dispositivo Samsung tem um kernel diferente, e o KernelSU precisa ser compilado especificamente pra cada versão. O A57 5G roda kernel 6.12.38 — mais novo que os outros devices suportados — então não existia módulo pronto. Além disso, kernels Samsung têm proteções extras (RKP, DEFEX, KDP) que precisam ser lidadas no patch do KernelSU.",
+        en: "Each Samsung device has a different kernel, and KernelSU needs to be compiled specifically for each version. The A57 5G runs kernel 6.12.38 — newer than the other supported devices — so no pre-built module existed. On top of that, Samsung kernels have extra protections (RKP, DEFEX, KDP) that need to be handled in the KernelSU patch.",
+      },
+      exploration: {
+        pt: "Estudei como o KernelSU é empacotado como módulo kernel (.ko) com um patch que modifica a inicialização do kernel pra injetar o su. O repo original usa um Makefile e patches .patch que aplicam as modificações necessárias. Para o A57, precisei adaptar o patch pra kernel 6.12, lidar com mudanças na API do kernel entre versões, e compilar o ksud (o userspace daemon do KernelSU) pra ARM64.",
+        en: "I studied how KernelSU is packaged as a kernel module (.ko) with a patch that modifies kernel initialization to inject su support. The original repo uses a Makefile and .patch files that apply the necessary modifications. For the A57, I needed to adapt the patch for kernel 6.12, handle API changes between kernel versions, and compile ksud (KernelSU's userspace daemon) for ARM64.",
+      },
+      build: {
+        pt: "O manifesto targets-v3.json usa um schema versionado com perfil por device: modelo, versões de kernel suportadas, URLs de download (pinadas por commit SHA), e tamanho esperado de cada artefato. O app usa isso pra verificar integridade antes de instalar. Ferramentas em Python (extract_target_symvers.py, audit_module_against_target.py) auxiliam na extração de símbolos e auditoria dos módulos compilados. O patch KernelSU customizado desabilita RKP e DEFEX via KDP, permitindo que o su funcione. Os payloads são organizados por deviceId com subpastas pro exploit e kernelsu.",
+        en: "The targets-v3.json manifest uses a versioned schema with per-device profiles: model, supported kernel versions, download URLs (pinned by commit SHA), and expected artifact sizes. The app uses this to verify integrity before installing. Python tools (extract_target_symvers.py, audit_module_against_target.py) assist in symbol extraction and compiled module auditing. The custom KernelSU patch disables RKP and DEFEX via KDP, allowing su to function. Payloads are organized by deviceId with subfolders for the exploit and kernelsu.",
+      },
+      result: {
+        pt: "11 dispositivos suportados com payloads verificados: Galaxy S25 série (S931/S936/S937/S938), Z Fold 7 (F966), S24 Ultra (S928), S24+ (S926), S24 (S921), A56 5G (A566), A36 5G (A366), S23 Ultra (S918) e A57 5G (A576) — este último portado do zero. Cada payload tem tamanho verificado e URL pinada por commit.",
+        en: "11 supported devices with verified payloads: Galaxy S25 series (S931/S936/S937/S938), Z Fold 7 (F966), S24 Ultra (S928), S24+ (S926), S24 (S921), A56 5G (A566), A36 5G (A366), S23 Ultra (S918) and A57 5G (A576) — the last one ported from scratch. Each payload has verified size and commit-pinned URL.",
+      },
+      lessons: {
+        pt: "Um sistema de integridade não precisa ser complexo — pinar por commit SHA + verificar tamanho de arquivo já elimina a maioria dos vetores de ataque num cenário de distribuição via GitHub raw. E a diferença entre kernel 6.6 e 6.12 é suficiente pra quebrar compilação; versionar o patch separadamente por faixa de kernel é essencial.",
+        en: "An integrity system doesn't need to be complex — pinning by commit SHA + verifying file size already eliminates most attack vectors in a GitHub raw distribution scenario. And the difference between kernel 6.6 and 6.12 is enough to break compilation; versioning the patch separately per kernel range is essential.",
+      },
+    },
+  },
   {
     slug: "jalep",
     title: "JALEP",
@@ -114,74 +216,9 @@ export const projects: Project[] = [
       },
     },
   },
-  {
-    slug: "ghostsu",
-    title: "ghostSu",
-    summary: {
-      pt: "Exploração de ferramentas para Android com foco em root e customização de sistema.",
-      en: "Exploration of Android tooling focused on root access and system customization.",
-    },
-    status: "idea",
-    role: { pt: "Pesquisa e experimentação", en: "Research and experimentation" },
-    period: { pt: "Em andamento", en: "Ongoing" },
-    technologies: ["Android", "KernelSU"],
-    pending: true,
-  },
-  {
-    slug: "ghostlock",
-    title: "GhostLock",
-    summary: {
-      pt: "Pesquisa e port em estágio inicial, ligado ao trabalho de customização e segurança em Android.",
-      en: "Early-stage research and porting work, related to Android customization and security work.",
-    },
-    status: "idea",
-    role: { pt: "Pesquisa e port", en: "Research and porting" },
-    period: { pt: "Em andamento", en: "Ongoing" },
-    technologies: ["Android"],
-    pending: true,
-  },
-  {
-    slug: "m3q",
-    title: "m3q",
-    summary: {
-      pt: "Pesquisa e port em estágio inicial, ainda sem escopo público definido.",
-      en: "Early-stage research and porting work, without a defined public scope yet.",
-    },
-    status: "idea",
-    role: { pt: "Pesquisa e port", en: "Research and porting" },
-    period: { pt: "Em andamento", en: "Ongoing" },
-    technologies: [],
-    pending: true,
-  },
-  {
-    slug: "convertit",
-    title: "ConvertIt",
-    summary: {
-      pt: "Ferramenta em estágio inicial de desenvolvimento — detalhes de escopo e tecnologia ainda a definir.",
-      en: "A tool in early development — scope and technology details still to be defined.",
-    },
-    status: "idea",
-    role: { pt: "Desenvolvimento", en: "Development" },
-    period: { pt: "Em andamento", en: "Ongoing" },
-    technologies: [],
-    pending: true,
-  },
-  {
-    slug: "jalepos",
-    title: "JalepOS",
-    summary: {
-      pt: "Extensão conceitual da marca JALEP explorando ideias de sistema/branding — ainda uma exploração, não um sistema operacional completo.",
-      en: "A conceptual extension of the JALEP brand exploring system/branding ideas — still an exploration, not a complete operating system.",
-    },
-    status: "idea",
-    role: { pt: "Conceito e branding", en: "Concept and branding" },
-    period: { pt: "Em andamento", en: "Ongoing" },
-    technologies: [],
-    pending: true,
-  },
 ];
 
-export function getProjects(_locale: Locale) {
+export function getProjects(locale: Locale) {
   return projects;
 }
 
