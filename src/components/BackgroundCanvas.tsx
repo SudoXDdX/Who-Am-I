@@ -70,7 +70,7 @@ export function BackgroundCanvas() {
           const dy = row * spacingY;
           const dist = Math.sqrt((dx - mx) ** 2 + (dy - my) ** 2);
           const maxDist = 180;
-          const brightness = dist < maxDist ? 0.15 + 0.25 * (1 - dist / maxDist) : 0.06;
+          const brightness = dist < maxDist ? 0.06 + 0.12 * (1 - dist / maxDist) : 0.025;
           ctx.fillStyle = `rgba(138,156,196,${brightness})`;
           ctx.beginPath();
           ctx.arc(dx, dy, 1, 0, Math.PI * 2);
@@ -85,8 +85,8 @@ export function BackgroundCanvas() {
         const r = orb.radius + pulse * 30;
         const safeR = Math.max(1, r);
         const gradient = ctx.createRadialGradient(ox, oy, 0, ox, oy, safeR);
-        gradient.addColorStop(0, `rgba(${orb.color},0.08)`);
-        gradient.addColorStop(0.5, `rgba(${orb.color},0.03)`);
+        gradient.addColorStop(0, `rgba(${orb.color},0.06)`);
+        gradient.addColorStop(0.5, `rgba(${orb.color},0.02)`);
         gradient.addColorStop(1, `rgba(${orb.color},0)`);
         ctx.fillStyle = gradient;
         ctx.beginPath();
@@ -97,7 +97,7 @@ export function BackgroundCanvas() {
       // Mouse glow
       if (mx > 0 && my > 0) {
         const mouseGrad = ctx.createRadialGradient(mx, my, 0, mx, my, 200);
-        mouseGrad.addColorStop(0, "rgba(130,177,255,0.04)");
+        mouseGrad.addColorStop(0, "rgba(130,177,255,0.025)");
         mouseGrad.addColorStop(1, "rgba(130,177,255,0)");
         ctx.fillStyle = mouseGrad;
         ctx.beginPath();
