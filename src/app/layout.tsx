@@ -7,6 +7,20 @@ export const metadata: Metadata = {
     "A personal technical archive: who SuXD is, what he has built, and how he got here.",
 };
 
+/** Inline script to set theme attrs before first paint (prevents FOUC) */
+const themeScript = `
+(function(){
+  try {
+    var m = localStorage.getItem('theme-mode') ||
+      (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    var c = localStorage.getItem('theme-color') || 'blue';
+    document.documentElement.setAttribute('data-mode', m);
+    document.documentElement.setAttribute('data-color', c);
+    document.documentElement.style.colorScheme = m;
+  } catch(e) {}
+})();
+`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -15,6 +29,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link

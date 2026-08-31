@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
 import { otherLocale } from "@/lib/i18n";
 import { getDictionary } from "@/content/dictionary";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function Nav({ locale }: { locale: Locale }) {
   const dict = getDictionary(locale);
@@ -57,12 +58,15 @@ export function Nav({ locale }: { locale: Locale }) {
               {link.label}
             </Link>
           ))}
-          <Link href={`/${alt}/`} aria-label={dict.nav.langSwitchAria} className="nav-lang-btn">
-            <span className="material-symbols-outlined" style={{ fontSize: 14 }}>
-              translate
-            </span>
-            {dict.nav.langLabel}
-          </Link>
+          <div className="ml-2 flex items-center gap-1.5">
+            <ThemeToggle locale={locale} />
+            <Link href={`/${alt}/`} aria-label={dict.nav.langSwitchAria} className="nav-lang-btn">
+              <span className="material-symbols-outlined" style={{ fontSize: 14 }}>
+                translate
+              </span>
+              {dict.nav.langLabel}
+            </Link>
+          </div>
         </nav>
 
         <details className="relative md:hidden">
@@ -97,6 +101,9 @@ export function Nav({ locale }: { locale: Locale }) {
                 </span>
                 {dict.nav.langLabel}
               </Link>
+              <div className="mt-2 flex items-center justify-center">
+                <ThemeToggle locale={locale} />
+              </div>
             </nav>
           </div>
         </details>

@@ -1,0 +1,138 @@
+"use client";
+
+import { useEffect, useState, useCallback, useRef } from "react";
+
+type ColorScheme = "blue" | "pink" | "green" | "black" | "white";
+type ColorMode = "dark" | "light";
+
+const COLOR_LABELS: Record<ColorScheme, { pt: string; en: string }> = {
+  blue: { pt: "Azul", en: "Blue" },
+  pink: { pt: "Rosa", en: "Pink" },
+  green: { pt: "Verde", en: "Green" },
+  black: { pt: "Preto", en: "Black" },
+  white: { pt: "Branco", en: "White" },
+};
+
+const COLOR_DOTS: Record<ColorScheme, string> = {
+  blue: "#4e8ff8",
+  pink: "#f94aab",
+  green: "#1aa64a",
+  black: "#5e5e5e",
+  white: "#e3e3e3",
+};
+
+function getInitialTheme(): { mode: ColorMode; color: ColorScheme } {
+  if (typeof window === "undefined") return { mode: "dark", color: "blue" };
+  const savedMode = localStorage.getItem("theme-mode") as ColorMode | null;
+  const savedColor = localStorage.getItem("theme-color") as ColorScheme | null;
+  return {
+    mode: savedMode || (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark"),
+    color: savedColor || "blue",
+  };
+}
+
+export function ThemeToggle({ locale }: { locale: "pt" | "en" }) {
+  const [mode, setMode] = useState<ColorMode>("dark");
+  const [color, setColor] = useState<ColorScheme>("blue");
+  const [showPicker, setShowPicker] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const { mode: m, color: c } = getInitialTheme();
+    setMode(m);
+    setColor(c);
+    applyTheme(m, c);
+  }, []);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
+        setShowPicker(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  function applyTheme(m: ColorMode, c: ColorScheme) {
+    const root = document.documentElement;
+    root.setAttribute("data-mode", m);
+    root.setAttribute("data-color", c);
+    root.style.colorScheme = m;
+    localStorage.setItem("theme-mode", m);
+    localStorage.setItem("theme-color", c);
+  }
+
+  const toggleMode = useCallback(() => {
+    setMode((prev) => {
+      const next = prev === "dark" ? "light" : "dark";
+      setColor((c) => {
+        applyTheme(next, c);
+        return c;
+      });
+      return next;
+    });
+  }, []);
+
+  const pickColor = useCallback((c: ColorScheme) => {
+    setColor(c);
+    applyTheme(mode, c);
+    setShowPicker(false);
+  }, [mode]);
+
+  return (
+    <div className="theme-toggle-wrapper" ref={panelRef}>
+      {/* Color picker popover */}
+      {showPicker && (
+        <div className="theme-color-picker glass-card">
+          <p className="theme-picker-label">{locale === "pt" ? "Cor" : "Color"}</p>
+          <div className="theme-color-options">
+            {(Object.keys(COLOR_DOTS) as ColorScheme[]).map((c) => (
+              <button
+                key={c}
+                onClick={() => pickColor(c)}
+                className={`theme-color-dot ${c === color ? "active" : ""}`}
+                style={{ "--dot-color": COLOR_DOTS[c] } as React.CSSProperties}
+                aria-label={`${COLOR_LABELS[c][locale]} theme`}
+                title={COLOR_LABELS[c][locale]}
+              >
+                {c === color && (
+                  <span className="material-symbols-outlined" style={{ fontSize: 14, color: c === "white" ? "#1b1b1c" : "#fff" }}>check</span>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="theme-toggle-row">
+        {/* Color picker trigger */}
+        <button
+          onClick={() => setShowPicker((p) => !p)}
+          className="theme-color-trigger"
+          aria-label={locale === "pt" ? "Escolher cor" : "Pick color"}
+          title={locale === "pt" ? "Escolher cor do tema" : "Pick theme color"}
+        >
+          <span className="theme-current-dot" style={{ background: COLOR_DOTS[color] }} />
+        </button>
+
+        {/* Dark/Light switch — Material-style */}
+        <button
+          onClick={toggleMode}
+          className="theme-switch"
+          role="switch"
+          aria-checked={mode === "light"}
+          aria-label={mode === "dark" ? (locale === "pt" ? "Ativar modo claro" : "Switch to light mode") : (locale === "pt" ? "Ativar modo escuro" : "Switch to dark mode")}
+        >
+          <span className="theme-switch-track">
+            <span className="theme-switch-thumb">
+              <span className="material-symbols-outlined theme-switch-icon" style={{ fontSize: 16 }}>
+                {mode === "dark" ? "dark_mode" : "light_mode"}
+              </span>
+            </span>
+          </span>
+        </button>
+      </div>
+    </div>
+  );
+}
