@@ -881,6 +881,20 @@ body::after {
   color: var(--color-primary);
 }
 
+
+/* Material Web focus ring for interactive elements */
+.nav-link:focus-visible,
+.stack-tag:focus-visible,
+.nav-lang-btn:focus-visible,
+.theme-color-dot:focus-visible,
+.theme-color-trigger:focus-visible {
+ outline: 2px solid var(--md-focus-ring-color);
+  outline-offset: var(--md-focus-ring-offset);
+  animation:
+    focus-ring-outward-grow calc(var(--md-focus-ring-duration) * 0.25) var(--ease-standard) 0s both,
+    focus-ring-outward-shrink calc(var(--md-focus-ring-duration) * 0.75) var(--ease-standard) calc(var(--md-focus-ring-duration) * 0.25) both;
+}
+
 .nav-mobile-panel {
   position: absolute;
   left: 0;
@@ -897,6 +911,47 @@ body::after {
   overflow-y: auto;
 }
 
+
+/* Material Web state layer for buttons (via box-shadow inset) */
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-color: #000;
+  opacity: 0;
+  transition: opacity 67ms linear;
+  pointer-events: none;
+}
+
+.btn-primary:hover::after {
+  opacity: 0.08;
+}
+
+.btn-primary:active::after {
+  opacity: 0.12;
+  transition-duration: 0ms;
+}
+
+.btn-ghost::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-color: var(--color-primary);
+  opacity: 0;
+  transition: opacity 67ms linear;
+  pointer-events: none;
+}
+
+.btn-ghost:hover::after {
+  opacity: 0.08;
+}
+
+.btn-ghost:active::after {
+  opacity: 0.12;
+  transition-duration: 0ms;
+}
 /* ═══════════════════════════════════════════
    HERO STYLES
    ═══════════════════════════════════════════ */
@@ -969,7 +1024,10 @@ body::after {
 
 .btn-primary:hover {
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 4px 16px color-mix(in srgb, var(--color-primary) 30%, transparent);
+  /* Material Web dual-shadow elevation — Level 3 */
+  box-shadow:
+    0 1px 3px 0px color-mix(in srgb, var(--md-shadow-color) 30%, transparent),
+    0 4px 8px 3px color-mix(in srgb, var(--md-shadow-color) 15%, transparent);
   filter: brightness(1.1);
 }
 
@@ -1043,6 +1101,7 @@ body::after {
 .stat-card:hover {
   border-color: var(--color-border-hover);
   transform: translateY(-2px) scale(1.01);
+  /* Material Web dual-shadow elevation — Level 2 */
   box-shadow:
     0 1px 2px 0px color-mix(in srgb, var(--md-shadow-color) 30%, transparent),
     0 2px 6px 2px color-mix(in srgb, var(--md-shadow-color) 15%, transparent);
@@ -1114,23 +1173,32 @@ body::after {
 }
 
 /* ═══════════════════════════════════════════
-   NEON CARD
+   NEON CARD — Material Web Integrated
+   ::before = gradient border
+   ::after  = state layer overlay
+   box-shadow = dual-shadow elevation (M3)
    ═══════════════════════════════════════════ */
 
 .neon-card {
   position: relative;
   overflow: hidden;
-  position: relative;
   background: var(--color-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
-  overflow: hidden;
-  transition: border-color var(--dur-m1) var(--spring-soft), transform var(--dur-s3) var(--spring-interactive), box-shadow var(--dur-m1) var(--spring-soft);
+  /* Material Web dual-shadow elevation — Level 1 (resting) */
+  box-shadow:
+    0 1px 2px 0px color-mix(in srgb, var(--md-shadow-color) 30%, transparent),
+    0 1px 3px 1px color-mix(in srgb, var(--md-shadow-color) 15%, transparent);
+  transition:
+    border-color var(--dur-m1) var(--spring-soft),
+    transform var(--dur-s3) var(--spring-interactive),
+    box-shadow 280ms var(--ease-standard);
 }
 
 .neon-card:hover {
   border-color: var(--color-border-hover);
   transform: translateY(-3px) scale(1.008);
+  /* Material Web dual-shadow elevation — Level 2 (hovered) */
   box-shadow:
     0 1px 2px 0px color-mix(in srgb, var(--md-shadow-color) 30%, transparent),
     0 2px 6px 2px color-mix(in srgb, var(--md-shadow-color) 15%, transparent);
@@ -1142,7 +1210,7 @@ body::after {
   transition-timing-function: var(--spring-bounce);
 }
 
-/* Gradient border effect */
+/* Gradient border effect — uses ::before */
 .neon-card::before {
   content: "";
   position: absolute;
@@ -1157,10 +1225,38 @@ body::after {
   opacity: 0;
   transition: opacity var(--dur-m1) var(--spring-enter);
   pointer-events: none;
+  z-index: 2;
 }
 
 .neon-card:hover::before {
   opacity: 0.8;
+}
+
+/* Material Web state layer — uses ::after instead of ::before */
+.neon-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-color: var(--color-primary);
+  opacity: 0;
+  transition: opacity 67ms linear, background-color 67ms linear;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.neon-card:hover::after {
+  opacity: var(--md-state-hover);
+}
+
+.neon-card:focus-visible::after {
+  opacity: var(--md-state-focus);
+  transition-duration: 0ms;
+}
+
+.neon-card:active::after {
+  opacity: var(--md-state-pressed);
+  transition-duration: 0ms;
 }
 
 /* Content above pseudo-elements */
@@ -1851,6 +1947,45 @@ body::after {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+
+/* Material Web radial-gradient soft ripple for nav and tags */
+.nav-link,
+.stack-tag,
+.nav-lang-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-link::after,
+.stack-tag::after,
+.nav-lang-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--color-primary) 12%, transparent) max(calc(100% - 70px), 65%),
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 105ms linear;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.nav-link:active::after,
+.stack-tag:active::after,
+.nav-lang-btn:active::after {
+  opacity: 1;
+}
+
+.nav-link > *,
+.stack-tag > * {
+  position: relative;
+  z-index: 1;
 }
 
 /* ═══════════════════════════════════════════
