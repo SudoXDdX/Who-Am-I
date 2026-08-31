@@ -37,7 +37,6 @@ export function ThemeToggle({ locale }: { locale: "pt" | "en" }) {
   const [showPicker, setShowPicker] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
 
-  // Apply theme when mode or color changes
   useEffect(() => {
     const root = document.documentElement;
     root.setAttribute("data-mode", mode);
@@ -68,7 +67,6 @@ export function ThemeToggle({ locale }: { locale: "pt" | "en" }) {
 
   return (
     <div className="theme-toggle-wrapper" ref={panelRef}>
-      {/* Color picker popover */}
       {showPicker && (
         <div className="theme-color-picker glass-card">
           <p className="theme-picker-label">{locale === "pt" ? "Cor" : "Color"}</p>
@@ -92,7 +90,6 @@ export function ThemeToggle({ locale }: { locale: "pt" | "en" }) {
       )}
 
       <div className="theme-toggle-row">
-        {/* Color picker trigger */}
         <button
           onClick={() => setShowPicker((p) => !p)}
           className="theme-color-trigger"
@@ -102,7 +99,6 @@ export function ThemeToggle({ locale }: { locale: "pt" | "en" }) {
           <span className="theme-current-dot" style={{ background: COLOR_DOTS[color] }} />
         </button>
 
-        {/* Dark/Light switch — Material-style */}
         <button
           onClick={toggleMode}
           className="theme-switch"

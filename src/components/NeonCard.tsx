@@ -9,7 +9,7 @@ interface NeonCardProps {
 
 export function NeonCard({ children, className = "" }: NeonCardProps) {
   return (
-    <div className={`neon-card ${className}`}>
+    <div className={`neon-card md-state-layer md-elevation md-elevation-1 ${className}`}>
       {children}
     </div>
   );

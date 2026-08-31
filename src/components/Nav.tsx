@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
 import { otherLocale } from "@/lib/i18n";
@@ -11,6 +11,8 @@ export function Nav({ locale }: { locale: Locale }) {
   const dict = getDictionary(locale);
   const alt = otherLocale(locale);
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const detailsRef = useRef<HTMLDetailsElement>(null);
 
   useEffect(() => {
     function onScroll() {
@@ -20,6 +22,21 @@ export function Nav({ locale }: { locale: Locale }) {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Close mobile menu on route change (link click)
+  function closeMenu() {
+    setMenuOpen(false);
+    if (detailsRef.current) detailsRef.current.open = false;
+  }
+
+  // Close on escape
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape" && menuOpen) closeMenu();
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
 
   const links = [
     { href: `/${locale}/`, label: dict.nav.home, icon: "home" },
@@ -43,6 +60,7 @@ export function Nav({ locale }: { locale: Locale }) {
         <Link
           href={`/${locale}/`}
           className="flex items-center gap-1.5 text-sm font-semibold tracking-tight text-[var(--color-text)] transition-colors hover:text-[var(--color-primary)]"
+          onClick={closeMenu}
         >
           <span className="material-symbols-outlined icon-primary" style={{ fontSize: 20 }}>
             terminal
@@ -69,39 +87,48 @@ export function Nav({ locale }: { locale: Locale }) {
           </div>
         </nav>
 
-        <details className="relative md:hidden">
+        <details
+          ref={detailsRef}
+          className="relative md:hidden"
+          open={menuOpen}
+          onToggle={(e) => setMenuOpen((e.target as HTMLDetailsElement).open)}
+        >
           <summary
             className="cursor-pointer list-none rounded-lg border border-[var(--color-border)] px-3 py-1.5 font-mono text-xs text-[var(--color-text-sec)]"
             aria-label="Menu"
           >
             <span className="material-symbols-outlined" style={{ fontSize: 18 }}>
-              menu
+              {menuOpen ? "close" : "menu"}
             </span>
           </summary>
           <div className="nav-mobile-panel">
-            <nav className="flex flex-col gap-0.5" aria-label="Primary">
-              {links.slice(1).map((link) => (
+            <nav className="flex flex-col gap-1" aria-label="Primary">
+              {links.slice(1).map((link, i) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="nav-link flex items-center gap-2"
+                  onClick={closeMenu}
+                  className="nav-link flex items-center gap-2.5 py-2.5"
+                  style={{ animationDelay: `${i * 50}ms` }}
                 >
-                  <span className="material-symbols-outlined icon-text-muted" style={{ fontSize: 16 }}>
+                  <span className="material-symbols-outlined icon-text-muted" style={{ fontSize: 18 }}>
                     {link.icon}
                   </span>
                   {link.label}
                 </Link>
               ))}
+              <div className="my-2 border-t border-[var(--color-border)]" />
               <Link
                 href={`/${alt}/`}
-                className="nav-lang-btn mt-1 justify-center"
+                onClick={closeMenu}
+                className="nav-lang-btn justify-center"
               >
                 <span className="material-symbols-outlined" style={{ fontSize: 14 }}>
                   translate
                 </span>
                 {dict.nav.langLabel}
               </Link>
-              <div className="mt-2 flex items-center justify-center">
+              <div className="flex items-center justify-center py-2">
                 <ThemeToggle locale={locale} />
               </div>
             </nav>

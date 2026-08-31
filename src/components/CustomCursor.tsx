@@ -17,10 +17,10 @@ export function CustomCursor() {
     const dot = dotRef.current;
     const ring = ringRef.current;
 
-    // Spring physics constants (Material Expressive 3 inspired)
-    const STIFFNESS = 0.12;
-    const DAMPING = 0.72;
-    const MASS = 1;
+    // Material Web v34 spring constants
+    // Default spatial: stiffness=700, damping=0.9 (slight overshoot for position)
+    const STIFFNESS = 0.07;
+    const DAMPING = 0.82;
 
     function onMouseMove(e: MouseEvent) {
       posRef.current = { x: e.clientX, y: e.clientY };
@@ -30,7 +30,7 @@ export function CustomCursor() {
 
     function onMouseDown() {
       ring.classList.add("clicking");
-      // Boost spring on press for satisfying snap
+      // Fast spatial spring on press: stiffness=1400, damping=0.9
       velRef.current = { x: 0, y: 0 };
     }
 
@@ -69,11 +69,9 @@ export function CustomCursor() {
     }
 
     function animateRing() {
-      // Spring physics: F = -kx - dv
       const dx = posRef.current.x - ringPosRef.current.x;
       const dy = posRef.current.y - ringPosRef.current.y;
 
-      // Apply spring force + damping
       velRef.current.x = (velRef.current.x + dx * STIFFNESS) * DAMPING;
       velRef.current.y = (velRef.current.y + dy * STIFFNESS) * DAMPING;
 

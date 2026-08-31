@@ -7,24 +7,43 @@ export function Ripple() {
     function createRipple(e: PointerEvent) {
       if (e.pointerType === "mouse" && (e as MouseEvent).button !== 0) return;
 
-      const target = (e.target as HTMLElement).closest(".neon-card, .btn-primary, .btn-ghost, .nav-link, .stack-tag");
+      const target = (e.target as HTMLElement).closest(
+        ".neon-card, .btn-primary, .btn-ghost, .nav-link, .stack-tag"
+      );
       if (!target) return;
 
+      const el = target as HTMLElement;
+      const rect = el.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const size = Math.max(rect.width, rect.height) * 2.5;
+
       const circle = document.createElement("span");
-      const diameter = Math.max(target.clientWidth, target.clientHeight);
-      const radius = diameter / 2;
-      const rect = target.getBoundingClientRect();
+      circle.style.cssText = `
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+        width: ${size}px;
+        height: ${size}px;
+        left: ${x - size / 2}px;
+        top: ${y - size / 2}px;
+        background: radial-gradient(
+          closest-side,
+          color-mix(in srgb, var(--color-primary) 20%, transparent) max(calc(100% - 70px), 65%),
+          transparent 100%
+        );
+        transform: scale(0);
+        opacity: 1;
+        animation: ripple-anim 450ms cubic-bezier(0.2, 0, 0, 1) forwards;
+      `;
 
-      circle.style.width = circle.style.height = `${diameter}px`;
-      circle.style.left = `${e.clientX - rect.left - radius}px`;
-      circle.style.top = `${e.clientY - rect.top - radius}px`;
-      circle.classList.add("ripple-effect");
-
-      const existing = target.querySelector(".ripple-effect");
+      const existing = el.querySelector(".ripple-effect");
       if (existing) existing.remove();
 
-      (target as HTMLElement).appendChild(circle);
-      window.setTimeout(() => circle.remove(), 600);
+      circle.classList.add("ripple-effect");
+      el.appendChild(circle);
+      window.setTimeout(() => circle.remove(), 500);
     }
 
     document.addEventListener("pointerdown", createRipple);
