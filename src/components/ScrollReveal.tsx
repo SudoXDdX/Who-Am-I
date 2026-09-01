@@ -11,8 +11,17 @@ interface ScrollRevealProps {
   variant?: ScrollRevealVariant;
 }
 
+const CLASS_MAP: Record<ScrollRevealVariant, string> = {
+  default: "scroll-reveal",
+  left: "scroll-reveal-left",
+  scale: "scroll-reveal-scale",
+  blur: "scroll-reveal-blur",
+  tilt: "scroll-reveal-tilt",
+};
+
 export function ScrollReveal({ children, className = "", delay = 0, variant = "default" }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const variantClass = CLASS_MAP[variant] || "scroll-reveal";
 
   useEffect(() => {
     const el = ref.current;
@@ -21,16 +30,6 @@ export function ScrollReveal({ children, className = "", delay = 0, variant = "d
       el.classList.add("revealed");
       return;
     }
-
-    const classMap: Record<ScrollRevealVariant, string> = {
-      default: "scroll-reveal",
-      left: "scroll-reveal-left",
-      scale: "scroll-reveal-scale",
-      blur: "scroll-reveal-blur",
-      tilt: "scroll-reveal-tilt",
-    };
-
-    const baseClass = classMap[variant] || "scroll-reveal";
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -49,16 +48,6 @@ export function ScrollReveal({ children, className = "", delay = 0, variant = "d
     observer.observe(el);
     return () => observer.disconnect();
   }, [delay, variant]);
-
-  const classMap: Record<ScrollRevealVariant, string> = {
-    default: "scroll-reveal",
-    left: "scroll-reveal-left",
-    scale: "scroll-reveal-scale",
-    blur: "scroll-reveal-blur",
-    tilt: "scroll-reveal-tilt",
-  };
-
-  const variantClass = classMap[variant] || "scroll-reveal";
 
   return (
     <div ref={ref} className={`${variantClass} ${className}`}>

@@ -7,12 +7,19 @@ import { useEffect, useRef, useCallback, useState } from "react";
    ═══════════════════════════════════════════════════════════ */
 
 export const CURSOR_TYPES = [
+  { id: 'default', label: { pt: 'Default', en: 'Default' } },
   { id: 'phantom-cross', label: { pt: 'Phantom Cross', en: 'Phantom Cross' } },
   { id: 'neon-ring', label: { pt: 'Neon Ring', en: 'Neon Ring' } },
   { id: 'plasma-orb', label: { pt: 'Plasma Orb', en: 'Plasma Orb' } },
   { id: 'pixel-arrow', label: { pt: 'Pixel Arrow', en: 'Pixel Arrow' } },
   { id: 'void-dot', label: { pt: 'Void Dot', en: 'Void Dot' } },
   { id: 'cyber-diamond', label: { pt: 'Cyber Diamond', en: 'Cyber Diamond' } },
+  { id: 'glitch-trail', label: { pt: 'Glitch Trail', en: 'Glitch Trail' } },
+  { id: 'hex-spinner', label: { pt: 'Hex Spinner', en: 'Hex Spinner' } },
+  { id: 'flame', label: { pt: 'Flame', en: 'Flame' } },
+  { id: 'ice-crystal', label: { pt: 'Ice Crystal', en: 'Ice Crystal' } },
+  { id: 'star-field', label: { pt: 'Star Field', en: 'Star Field' } },
+  { id: 'sonic-wave', label: { pt: 'Sonic Wave', en: 'Sonic Wave' } },
 ] as const;
 
 export type CursorType = (typeof CURSOR_TYPES)[number]['id'];
@@ -38,17 +45,24 @@ interface Particle {
 
 function getCursorClass(type: CursorType): string {
   switch (type) {
+    case 'default': return 'default-cursor-hidden';
     case 'phantom-cross': return 'phantom-cursor';
     case 'neon-ring': return 'neon-ring-cursor';
     case 'plasma-orb': return 'plasma-orb-cursor';
     case 'pixel-arrow': return 'pixel-arrow-cursor';
     case 'void-dot': return 'void-dot-cursor';
     case 'cyber-diamond': return 'cyber-diamond-cursor';
+    case 'glitch-trail': return 'glitch-trail-cursor';
+    case 'hex-spinner': return 'hex-spinner-cursor';
+    case 'flame': return 'flame-cursor';
+    case 'ice-crystal': return 'ice-crystal-cursor';
+    case 'star-field': return 'star-field-cursor';
+    case 'sonic-wave': return 'sonic-wave-cursor';
     default: return 'phantom-cursor';
   }
 }
 
-function getStoredCursorType(): CursorType {
+function getInitialCursorType(): CursorType {
   if (typeof window === 'undefined') return 'phantom-cross';
   const stored = localStorage.getItem('cursor-type');
   if (stored && CURSOR_TYPES.some(c => c.id === stored)) return stored as CursorType;
@@ -56,8 +70,7 @@ function getStoredCursorType(): CursorType {
 }
 
 export function CustomCursor() {
-  const [cursorType, setCursorType] = useState<CursorType>('phantom-cross');
-  const [mounted, setMounted] = useState(false);
+  const [cursorType, setCursorType] = useState<CursorType>(getInitialCursorType);
   const cursorRef = useRef<HTMLDivElement>(null);
   const trailRef = useRef<HTMLDivElement>(null);
   const posRef = useRef({ x: -100, y: -100 });
@@ -70,14 +83,13 @@ export function CustomCursor() {
   const isClickingRef = useRef(false);
   const cursorPosRef = { x: -100, y: -100 };
   const cursorTypeRef = useRef<CursorType>('phantom-cross');
+  const mountRef = useRef(false);
 
-  // Read from localStorage on mount
+  // Sync mounted flag without setState
   useEffect(() => {
-    const type = getStoredCursorType();
-    setCursorType(type);
-    cursorTypeRef.current = type;
-    setMounted(true);
-  }, []);
+    mountRef.current = true;
+    cursorTypeRef.current = getInitialCursorType();
+  });
 
   // Listen for cursor-change custom event
   useEffect(() => {
@@ -148,6 +160,20 @@ export function CustomCursor() {
 
     const cursor = cursorRef.current;
     const trail = trailRef.current;
+
+    // If "default" cursor selected, just restore system cursor and stop
+    if (cursorTypeRef.current === 'default') {
+      document.documentElement.classList.add('system-cursor-active');
+      cursor.style.display = 'none';
+      trail.style.display = 'none';
+      return () => {
+        document.documentElement.classList.remove('system-cursor-active');
+      };
+    }
+
+    document.documentElement.classList.remove('system-cursor-active');
+    cursor.style.display = '';
+    trail.style.display = '';
 
     // Spring constants
     const STIFFNESS = 0.12;
@@ -287,8 +313,8 @@ export function CustomCursor() {
     };
   }, [spawnParticle, spawnClickBurst]);
 
-  // Don't render until mounted (avoids SSR hydration mismatch)
-  if (!mounted) return null;
+  // Don't render on server (avoids SSR hydration mismatch)
+  if (typeof window === 'undefined') return null;
 
   const cursorClass = getCursorClass(cursorType);
 
@@ -338,6 +364,64 @@ export function CustomCursor() {
             <div className="cyber-diamond-circuit cd-circuit-2" />
             <div className="cyber-diamond-circuit cd-circuit-3" />
             <div className="cyber-diamond-circuit cd-circuit-4" />
+          </>
+        );
+      case 'glitch-trail':
+        return (
+          <>
+            <div className="glitch-main" />
+            <div className="glitch-offset glitch-r" />
+            <div className="glitch-offset glitch-b" />
+          </>
+        );
+      case 'hex-spinner':
+        return (
+          <>
+            <div className="hex-ring" />
+            <div className="hex-ring-inner" />
+            <div className="hex-dot" />
+          </>
+        );
+      case 'flame':
+        return (
+          <>
+            <div className="flame-core" />
+            <div className="flame-tip" />
+            <div className="flame-outer" />
+          </>
+        );
+      case 'ice-crystal':
+        return (
+          <>
+            <div className="ice-core" />
+            <div className="ice-spoke ice-spoke-1" />
+            <div className="ice-spoke ice-spoke-2" />
+            <div className="ice-spoke ice-spoke-3" />
+            <div className="ice-spoke ice-spoke-4" />
+            <div className="ice-spoke ice-spoke-5" />
+            <div className="ice-spoke ice-spoke-6" />
+          </>
+        );
+      case 'star-field':
+        return (
+          <>
+            <div className="star-cross-h" />
+            <div className="star-cross-v" />
+            <div className="star-dot" />
+            <div className="star-ring" />
+            <div className="star-spark star-spark-1" />
+            <div className="star-spark star-spark-2" />
+            <div className="star-spark star-spark-3" />
+            <div className="star-spark star-spark-4" />
+          </>
+        );
+      case 'sonic-wave':
+        return (
+          <>
+            <div className="sonic-ring sonic-ring-1" />
+            <div className="sonic-ring sonic-ring-2" />
+            <div className="sonic-ring sonic-ring-3" />
+            <div className="sonic-dot" />
           </>
         );
       default:

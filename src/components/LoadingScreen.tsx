@@ -1,37 +1,42 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 export function LoadingScreen() {
   const [hidden, setHidden] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const timerRefs = useRef<ReturnType<typeof setTimeout>[]>([]);
 
-  useEffect(() => {
-    setMounted(true);
+  const handleReady = useCallback(() => {
     const MIN_DISPLAY = 1500;
     const EXIT_DELAY = 600;
-    const start = Date.now();
+    const elapsed = performance.now();
 
-    const onReady = () => {
-      const elapsed = Date.now() - start;
-      const remaining = Math.max(0, MIN_DISPLAY - elapsed);
-      setTimeout(() => {
-        setHidden(true);
-        setTimeout(() => {
-          setMounted(false);
-        }, EXIT_DELAY);
-      }, remaining);
-    };
+    const t1 = setTimeout(() => {
+      setHidden(true);
+    }, MIN_DISPLAY);
 
-    if (document.readyState === "complete") {
-      onReady();
-    } else {
-      window.addEventListener("load", onReady);
-      return () => window.removeEventListener("load", onReady);
-    }
+    const t2 = setTimeout(() => {
+      setVisible(false);
+      timerRefs.current = [];
+    }, MIN_DISPLAY + EXIT_DELAY);
+
+    timerRefs.current = [t1, t2];
   }, []);
 
-  if (!mounted) return null;
+  useEffect(() => {
+    if (document.readyState === "complete") {
+      handleReady();
+    } else {
+      window.addEventListener("load", handleReady);
+      return () => window.removeEventListener("load", handleReady);
+    }
+    return () => {
+      timerRefs.current.forEach(t => clearTimeout(t));
+    };
+  }, [handleReady]);
+
+  if (!visible) return null;
 
   return (
     <div

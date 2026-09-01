@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 
-type ColorScheme = "blue" | "pink" | "green" | "black" | "white" | "red" | "cyan" | "purple";
+type ColorScheme = "blue" | "pink" | "green" | "black" | "white" | "red" | "cyan" | "purple" | "orange" | "teal" | "magenta" | "lime";
 type ColorMode = "dark" | "light";
 
 const COLOR_LABELS: Record<ColorScheme, { pt: string; en: string }> = {
@@ -14,6 +14,10 @@ const COLOR_LABELS: Record<ColorScheme, { pt: string; en: string }> = {
   red: { pt: "Vermelho", en: "Red" },
   cyan: { pt: "Ciano", en: "Cyan" },
   purple: { pt: "Roxo", en: "Purple" },
+  orange: { pt: "Laranja", en: "Orange" },
+  teal: { pt: "Teal", en: "Teal" },
+  magenta: { pt: "Magenta", en: "Magenta" },
+  lime: { pt: "Lima", en: "Lime" },
 };
 
 const COLOR_DOTS: Record<ColorScheme, string> = {
@@ -25,21 +29,27 @@ const COLOR_DOTS: Record<ColorScheme, string> = {
   red: "#ff5252",
   cyan: "#38bdf8",
   purple: "#a855f7",
+  orange: "#FF8C00",
+  teal: "#14B8A6",
+  magenta: "#E91E8C",
+  lime: "#84CC16",
 };
 
-function getInitialTheme(): { mode: ColorMode; color: ColorScheme } {
-  if (typeof window === "undefined") return { mode: "dark", color: "blue" };
-  const savedMode = localStorage.getItem("theme-mode") as ColorMode | null;
-  const savedColor = localStorage.getItem("theme-color") as ColorScheme | null;
-  return {
-    mode: savedMode || (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark"),
-    color: savedColor || "blue",
-  };
+function getInitialThemeMode(): ColorMode {
+  if (typeof window === "undefined") return "dark";
+  const saved = localStorage.getItem("theme-mode") as ColorMode | null;
+  return saved || (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+}
+
+function getInitialThemeColor(): ColorScheme {
+  if (typeof window === "undefined") return "blue";
+  const saved = localStorage.getItem("theme-color") as ColorScheme | null;
+  return saved || "blue";
 }
 
 export function ThemeToggle({ locale }: { locale: "pt" | "en" }) {
-  const [mode, setMode] = useState<ColorMode>(() => getInitialTheme().mode);
-  const [color, setColor] = useState<ColorScheme>(() => getInitialTheme().color);
+  const [mode, setMode] = useState<ColorMode>(getInitialThemeMode);
+  const [color, setColor] = useState<ColorScheme>(getInitialThemeColor);
   const [showPicker, setShowPicker] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -74,9 +84,9 @@ export function ThemeToggle({ locale }: { locale: "pt" | "en" }) {
   return (
     <div className="theme-toggle-wrapper" ref={panelRef}>
       {showPicker && (
-        <div className="theme-color-picker glass-card">
+        <div className="theme-color-picker glass-card md-elevation-3">
           <p className="theme-picker-label">{locale === "pt" ? "Cor" : "Color"}</p>
-          <div className="theme-color-options">
+          <div className="theme-color-options theme-color-options-grid">
             {(Object.keys(COLOR_DOTS) as ColorScheme[]).map((c) => (
               <button
                 key={c}
