@@ -65,7 +65,7 @@ export default async function LocaleLayout({
   const locale = rawLocale as Locale;
 
   return (
-    <div lang={locale === "pt" ? "pt-BR" : "en"} className="flex min-h-screen flex-col">
+    <div lang={locale === "pt" ? "pt-BR" : "en"} className="page-vignette flex min-h-screen flex-col">
       {/* Wallpaper Background */}
       <WallpaperEngine />
       <CustomCursor />

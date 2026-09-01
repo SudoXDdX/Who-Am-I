@@ -10,6 +10,8 @@ import { TypeWriter } from "@/components/TypeWriter";
 import { NeonCard } from "@/components/NeonCard";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { TerminalPrompt } from "@/components/TerminalPrompt";
+import { AnimatedCounter } from "@/components/AnimatedCounter";
+import { MagneticButton } from "@/components/MagneticButton";
 
 export function generateStaticParams() {
   return localeParams();
@@ -72,6 +74,15 @@ export default async function HomePage({
     <>
       {/* ═══ HERO ═══ */}
       <section className="relative z-[2] overflow-hidden px-6 pb-20 pt-32 sm:pb-28 sm:pt-40">
+        {/* Floating particles */}
+        <div className="hero-particles" aria-hidden="true">
+          <div className="hero-particle" />
+          <div className="hero-particle" />
+          <div className="hero-particle" />
+          <div className="hero-particle" />
+          <div className="hero-particle" />
+        </div>
+
         <div className="mx-auto grid max-w-[1080px] gap-12 lg:grid-cols-[1fr_320px] lg:gap-16">
           {/* Left: Text content with entrance animations */}
           <div className="max-w-2xl">
@@ -91,19 +102,23 @@ export default async function HomePage({
             </div>
 
             <div className="hero-entrance-4 mt-8 flex flex-wrap gap-3">
-              <Link href={`/${locale}/about/`} className="btn-primary">
-                <span className="material-symbols-outlined" style={{ fontSize: 16 }}>explore</span>
-                {dict.home.cta}
-              </Link>
-              <Link href={`/${locale}/projects/`} className="btn-ghost">
-                {dict.home.sections.projectsCta}
-              </Link>
+              <MagneticButton>
+                <Link href={`/${locale}/about/`} className="btn-primary">
+                  <span className="material-symbols-outlined" style={{ fontSize: 16 }}>explore</span>
+                  {dict.home.cta}
+                </Link>
+              </MagneticButton>
+              <MagneticButton>
+                <Link href={`/${locale}/projects/`} className="btn-ghost">
+                  {dict.home.sections.projectsCta}
+                </Link>
+              </MagneticButton>
             </div>
 
             <div className="hero-entrance-5 hero-stats mt-10">
               {stats.map((stat) => (
-                <div key={stat.label} className="stat-card">
-                  <div className="stat-card-value">{stat.value}</div>
+                <div key={stat.label} className="stat-card stat-card-glass">
+                  <div className="stat-card-value"><AnimatedCounter value={stat.value} /></div>
                   <div className="stat-card-label">{stat.label}</div>
                 </div>
               ))}
@@ -124,9 +139,9 @@ export default async function HomePage({
 
       {/* ═══ SECTION PREVIEW CARDS ═══ */}
       <section className="relative z-[2] px-6 pb-20">
-        <div className="mx-auto grid max-w-[1080px] gap-5 sm:grid-cols-2">
+        <div className="card-grid-stagger mx-auto grid max-w-[1080px] gap-5 sm:grid-cols-2">
           {cards.map((card, index) => (
-            <ScrollReveal key={card.href} delay={index * 100}>
+            <ScrollReveal key={card.href} delay={index * 100} variant="blur">
               <Link href={card.href} className="group block">
                 <NeonCard className="tilt-card flex h-full flex-col justify-between gap-4 p-7">
                   <div className="flex items-start justify-between gap-3">
