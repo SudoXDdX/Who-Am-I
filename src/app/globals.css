@@ -729,9 +729,17 @@ html[data-mode] .status-badge {
    ═══════════════════════════════════════════ */
 
 @media (pointer: fine) {
-  *, *::before, *::after {
+  * {
     cursor: none !important;
   }
+}
+
+/* Override for System Default cursor mode */
+.system-cursor-active,
+.system-cursor-active *,
+.system-cursor-active *::before,
+.system-cursor-active *::after {
+  cursor: auto !important;
 }
 
 /* ═══════════════════════════════════════════
@@ -4476,4 +4484,267 @@ body::after { z-index: 9998; }
   .cursor-trail-layer {
     display: none !important;
   }
+}
+
+/* ═══════════════════════════════════════════
+   NAV LINKS BLUR ENHANCEMENT
+   ═══════════════════════════════════════════ */
+
+.nav-link {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  position: relative;
+}
+
+.nav-link:hover {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.nav-glass-inner > nav {
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 12px;
+  padding: 4px 8px;
+  background: color-mix(in srgb, var(--color-card) 20%, transparent);
+}
+
+.nav-mobile-panel {
+  backdrop-filter: blur(32px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(1.4) !important;
+}
+
+/* ═══════════════════════════════════════════
+   PERFORMANCE MODE SYSTEM
+   ═══════════════════════════════════════════ */
+
+/* Performance mode trigger button */
+.perf-mode-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border-hover);
+  background: transparent;
+  color: var(--color-text-sec);
+  transition: border-color var(--dur-s2) var(--spring-interactive), color var(--dur-s2) var(--spring-interactive), background-color var(--dur-s2) var(--spring-interactive);
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.perf-mode-trigger:hover {
+  border-color: var(--color-primary-border);
+  color: var(--color-primary);
+  background: var(--color-primary-dim);
+}
+
+/* Performance picker panel */
+.perf-picker {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 200px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--color-card) 85%, transparent);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid var(--color-border-hover);
+  padding: 8px;
+  z-index: 200;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+.perf-picker-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-text-muted);
+  padding: 4px 8px 6px;
+}
+
+.perf-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-sec);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background-color 100ms ease, color 100ms ease;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.perf-option:hover {
+  background: var(--color-primary-dim);
+  color: var(--color-text);
+}
+
+.perf-option.active {
+  background: var(--color-primary-dim);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.perf-option-icon {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.perf-option-desc {
+  font-size: 0.6rem;
+  color: var(--color-text-muted);
+  margin-top: 1px;
+}
+
+/* ─── LOW END MODE ─── */
+[data-perf="low"] .wallpaper-blob,
+[data-perf="low"] .wallpaper-noise,
+[data-perf="low"] .wallpaper-grid,
+[data-perf="low"] .aurora-blob,
+[data-perf="low"] .noise-overlay,
+[data-perf="low"] .dot-grid-overlay {
+  display: none !important;
+}
+
+[data-perf="low"] .wallpaper-engine {
+  background: var(--color-bg) !important;
+}
+
+[data-perf="low"] .cursor-particle,
+[data-perf="low"] .cursor-pixel-particle,
+[data-perf="low"] .cursor-trail-layer {
+  display: none !important;
+}
+
+[data-perf="low"] .hero-particle,
+[data-perf="low"] .hero-particles {
+  display: none !important;
+}
+
+[data-perf="low"] .page-vignette::before {
+  display: none !important;
+}
+
+[data-perf="low"] .neon-card-glow::before {
+  animation: none !important;
+  background: var(--color-primary-border) !important;
+}
+
+[data-perf="low"] .scroll-reveal {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+[data-perf="low"] .card-grid-stagger > * {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+[data-perf="low"] .hero-tag {
+  animation: none !important;
+  box-shadow: none !important;
+}
+
+[data-perf="low"] .hero-tag-dot {
+  animation: none !important;
+}
+
+/* Keep blur but reduce quality */
+[data-perf="low"] .nav-glass {
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+[data-perf="low"] .glass-card,
+[data-perf="low"] .stat-card-glass,
+[data-perf="low"] .nav-mobile-panel,
+[data-perf="low"] .cursor-selector-picker,
+[data-perf="low"] .perf-picker,
+[data-perf="low"] .theme-picker {
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+/* Disable heavy box-shadows */
+[data-perf="low"] .md-elevation-1,
+[data-perf="low"] .md-elevation-2,
+[data-perf="low"] .md-elevation-3,
+[data-perf="low"] .md-elevation-4 {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2) !important;
+}
+
+[data-perf="low"] .neon-card::before,
+[data-perf="low"] .neon-card::after {
+  display: none !important;
+}
+
+[data-perf="low"] .gradient-text-animated {
+  animation: none !important;
+}
+
+/* ─── MID END MODE ─── */
+/* High End features with optimized CSS — obscure V8 perf tricks */
+[data-perf="mid"] .wallpaper-noise,
+[data-perf="mid"] .dot-grid-overlay {
+  display: none !important;
+}
+
+/* Reduce blob count to 3 via opacity */
+[data-perf="mid"] .wp-blob-4,
+[data-perf="mid"] .wp-blob-5,
+[data-perf="mid"] .wp-blob-6 {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Halve particle count */
+[data-perf="mid"] .cursor-particle,
+[data-perf="mid"] .cursor-pixel-particle {
+  will-change: auto !important;
+}
+
+/* Reduce wallpaper blob animation complexity */
+[data-perf="mid"] .wallpaper-blob {
+  contain: layout style paint !important;
+  will-change: transform !important;
+}
+
+/* Keep blur but slightly reduced */
+[data-perf="mid"] .nav-glass {
+  backdrop-filter: blur(16px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.2) !important;
+}
+
+/* Use GPU-friendly compositing for cards */
+[data-perf="mid"] .neon-card,
+[data-perf="mid"] .glass-card,
+[data-perf="mid"] .stat-card-glass {
+  contain: layout style paint;
+  will-change: auto;
+}
+
+[data-perf="mid"] .hero-particle {
+  contain: strict !important;
+}
+
+/* ─── HIGH END MODE (default) ─── */
+/* All effects enabled — full experience */
+[data-perf="high"] {
+  /* No restrictions — everything runs at full quality */
 }

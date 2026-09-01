@@ -15,6 +15,7 @@ export const dictionary = {
       projects: "projetos",
       stack: "stack",
       lab: "lab",
+      rices: "rices",
       contact: "contato",
       langLabel: "EN",
       langSwitchAria: "Mudar para inglês",
@@ -142,6 +143,12 @@ export const dictionary = {
       body: "Esse caminho não existe neste sistema de arquivos.",
       cta: "Voltar para o início",
     },
+    rices: {
+      kicker: "rices",
+      title: "Rices & Configs",
+      intro: "Screenshots e configurações do meu setup. Em breve.",
+      comingSoon: "Em breve — enviarei fotos do meu rice e vou adicionar aqui.",
+    },
     contact: {
       kicker: "contato",
       title: "Entre em contato",
@@ -166,6 +173,7 @@ export const dictionary = {
       projects: "projects",
       stack: "stack",
       lab: "lab",
+      rices: "rices",
       contact: "contact",
       langLabel: "PT",
       langSwitchAria: "Switch to Portuguese",
@@ -292,6 +300,12 @@ export const dictionary = {
       title: "Page not found",
       body: "That path doesn't exist on this filesystem.",
       cta: "Back to home",
+    },
+    rices: {
+      kicker: "rices",
+      title: "Rices & Configs",
+      intro: "Screenshots and configurations of my setup. Coming soon.",
+      comingSoon: "Coming soon — I'll send screenshots of my rice and add them here.",
     },
     contact: {
       kicker: "contact",

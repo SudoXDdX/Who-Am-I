@@ -7,7 +7,7 @@ import { useEffect, useRef, useCallback, useState } from "react";
    ═══════════════════════════════════════════════════════════ */
 
 export const CURSOR_TYPES = [
-  { id: 'default', label: { pt: 'Default', en: 'Default' } },
+  { id: 'default', label: { pt: 'System Default', en: 'System Default' } },
   { id: 'phantom-cross', label: { pt: 'Phantom Cross', en: 'Phantom Cross' } },
   { id: 'neon-ring', label: { pt: 'Neon Ring', en: 'Neon Ring' } },
   { id: 'plasma-orb', label: { pt: 'Plasma Orb', en: 'Plasma Orb' } },
@@ -82,14 +82,7 @@ export function CustomCursor() {
   const isHoveringRef = useRef(false);
   const isClickingRef = useRef(false);
   const cursorPosRef = { x: -100, y: -100 };
-  const cursorTypeRef = useRef<CursorType>('phantom-cross');
-  const mountRef = useRef(false);
-
-  // Sync mounted flag without setState
-  useEffect(() => {
-    mountRef.current = true;
-    cursorTypeRef.current = getInitialCursorType();
-  });
+  const cursorTypeRef = useRef<CursorType>(getInitialCursorType());
 
   // Listen for cursor-change custom event
   useEffect(() => {
@@ -109,7 +102,7 @@ export function CustomCursor() {
   }, []);
 
   const spawnParticle = useCallback((type?: CursorType) => {
-    const maxParticles = type === 'pixel-arrow' ? 30 : 20;
+    const maxParticles = type === 'pixel-arrow' ? 20 : 12;
     if (particlesRef.current.length > maxParticles) return;
     const el = document.createElement('div');
     const ct = type || cursorTypeRef.current;
@@ -134,7 +127,7 @@ export function CustomCursor() {
   const spawnClickBurst = useCallback((type: CursorType, x: number, y: number) => {
     const count = type === 'pixel-arrow' ? 12 : type === 'plasma-orb' ? 15 : type === 'cyber-diamond' ? 10 : 6;
     for (let i = 0; i < count; i++) {
-      if (particlesRef.current.length > 40) break;
+      if (particlesRef.current.length > 30) break;
       const el = document.createElement('div');
       el.className = type === 'pixel-arrow' ? 'cursor-pixel-particle' : 'cursor-particle';
       trailRef.current?.appendChild(el);
@@ -161,23 +154,8 @@ export function CustomCursor() {
     const cursor = cursorRef.current;
     const trail = trailRef.current;
 
-    // If "default" cursor selected, just restore system cursor and stop
-    if (cursorTypeRef.current === 'default') {
-      document.documentElement.classList.add('system-cursor-active');
-      cursor.style.display = 'none';
-      trail.style.display = 'none';
-      return () => {
-        document.documentElement.classList.remove('system-cursor-active');
-      };
-    }
-
-    document.documentElement.classList.remove('system-cursor-active');
-    cursor.style.display = '';
-    trail.style.display = '';
-
-    // Spring constants
-    const STIFFNESS = 0.12;
-    const DAMPING = 0.75;
+    // Smooth lerp — less springy, more responsive
+    const LERP = 0.35;
 
     function onMouseMove(e: MouseEvent) {
       posRef.current = { x: e.clientX, y: e.clientY };
@@ -186,7 +164,6 @@ export function CustomCursor() {
     function onMouseDown() {
       isClickingRef.current = true;
       cursor.classList.add('cursor-clicking');
-      velRef.current = { x: 0, y: 0 };
       spawnClickBurst(cursorTypeRef.current, cursorPosRef.x, cursorPosRef.y);
     }
 
@@ -229,19 +206,29 @@ export function CustomCursor() {
     function animate() {
       const ct = cursorTypeRef.current;
 
+      // If default, hide custom cursor and show system
+      if (ct === 'default') {
+        cursor.style.display = 'none';
+        trail.style.display = 'none';
+        document.documentElement.classList.add('system-cursor-active');
+        rafRef.current = requestAnimationFrame(animate);
+        return;
+      }
+
+      document.documentElement.classList.remove('system-cursor-active');
+      cursor.style.display = '';
+      trail.style.display = '';
+
+      // Direct lerp — no spring oscillation
       const dx = posRef.current.x - cursorPosRef.x;
       const dy = posRef.current.y - cursorPosRef.y;
-
-      velRef.current.x = (velRef.current.x + dx * STIFFNESS) * DAMPING;
-      velRef.current.y = (velRef.current.y + dy * STIFFNESS) * DAMPING;
-
-      cursorPosRef.x += velRef.current.x;
-      cursorPosRef.y += velRef.current.y;
+      cursorPosRef.x += dx * LERP;
+      cursorPosRef.y += dy * LERP;
 
       cursor.style.left = `${cursorPosRef.x}px`;
       cursor.style.top = `${cursorPosRef.y}px`;
 
-      const speed = Math.sqrt(velRef.current.x ** 2 + velRef.current.y ** 2);
+      const speed = Math.sqrt(dx * dx + dy * dy);
 
       // Type-specific animation
       if (ct === 'phantom-cross') {
@@ -257,10 +244,10 @@ export function CustomCursor() {
         cursor.style.setProperty('--speed', `${Math.min(speed, 8)}`);
       }
 
-      // Spawn trail particles
+      // Spawn trail particles (reduced rate for perf)
       const now = performance.now();
-      const spawnThreshold = ct === 'pixel-arrow' ? 30 : ct === 'void-dot' ? 25 : 40;
-      const speedThreshold = ct === 'void-dot' ? 0.8 : 1.5;
+      const spawnThreshold = ct === 'pixel-arrow' ? 50 : ct === 'void-dot' ? 40 : 60;
+      const speedThreshold = ct === 'void-dot' ? 1.2 : 2.5;
       if (speed > speedThreshold && now - lastSpawnRef.current > spawnThreshold) {
         spawnParticle(ct);
         lastSpawnRef.current = now;
@@ -269,10 +256,8 @@ export function CustomCursor() {
       // Update particles
       for (let i = particlesRef.current.length - 1; i >= 0; i--) {
         const p = particlesRef.current[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.vx *= 0.96;
-        p.vy *= 0.96;
+        p.x += p.vx; p.y += p.vy;
+        p.vx *= 0.94; p.vy *= 0.94;
         p.life--;
 
         const alpha = p.life / p.maxLife;
@@ -315,6 +300,11 @@ export function CustomCursor() {
 
   // Don't render on server (avoids SSR hydration mismatch)
   if (typeof window === 'undefined') return null;
+
+  // Don't render cursor div at all for default — system cursor handles it
+  if (cursorType === 'default') {
+    return null;
+  }
 
   const cursorClass = getCursorClass(cursorType);
 

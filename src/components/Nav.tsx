@@ -7,6 +7,7 @@ import { otherLocale } from "@/lib/i18n";
 import { getDictionary } from "@/content/dictionary";
 import { ThemeToggle } from "./ThemeToggle";
 import { CursorSelector } from "./CursorSelector";
+import { PerformanceMode } from "./PerformanceMode";
 
 export function Nav({ locale }: { locale: Locale }) {
   const dict = getDictionary(locale);
@@ -46,6 +47,7 @@ export function Nav({ locale }: { locale: Locale }) {
     { href: `/${locale}/projects/`, label: dict.nav.projects, icon: "folder_special" },
     { href: `/${locale}/stack/`, label: dict.nav.stack, icon: "code" },
     { href: `/${locale}/lab/`, label: dict.nav.lab, icon: "science" },
+    { href: `/${locale}/rices/`, label: dict.nav.rices, icon: "wallpaper" },
     { href: `/${locale}/contact/`, label: dict.nav.contact, icon: "mail" },
   ];
 
@@ -79,6 +81,7 @@ export function Nav({ locale }: { locale: Locale }) {
           ))}
           <div className="ml-2 flex items-center gap-1.5">
             <CursorSelector locale={locale} />
+            <PerformanceMode locale={locale} />
             <ThemeToggle locale={locale} />
             <Link href={`/${alt}/`} aria-label={dict.nav.langSwitchAria} className="nav-lang-btn">
               <span className="material-symbols-outlined" style={{ fontSize: 14 }}>
@@ -132,6 +135,7 @@ export function Nav({ locale }: { locale: Locale }) {
               </Link>
               <div className="flex items-center justify-center gap-2 py-2">
                 <CursorSelector locale={locale} />
+                <PerformanceMode locale={locale} />
                 <ThemeToggle locale={locale} />
               </div>
             </nav>
