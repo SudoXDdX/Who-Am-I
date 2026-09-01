@@ -44,7 +44,7 @@ export const projects: Project[] = [
       pt: "Port, adaptação do app e do pipeline de build para o A57 5G",
       en: "Port, app adaptation and build pipeline for the A57 5G",
     },
-    period: { pt: "2025 – presente", en: "2025 – present" },
+    period: { pt: "2026 – presente", en: "2026 – present" },
     technologies: [
       "Kotlin",
       "Jetpack Compose",
@@ -95,7 +95,7 @@ export const projects: Project[] = [
       pt: "Compilação de KernelSU, build de exploits, manutenção do manifesto de targets",
       en: "KernelSU compilation, exploit builds, targets manifest maintenance",
     },
-    period: { pt: "2025 – presente", en: "2025 – present" },
+    period: { pt: "2026 – presente", en: "2026 – present" },
     technologies: [
       "KernelSU",
       "Linux Kernel (6.12 / 6.6 / 6.1 / 5.15)",
@@ -218,7 +218,7 @@ export const projects: Project[] = [
   },
 ];
 
-export function getProjects(locale: Locale) {
+export function getProjects(_locale: Locale) {
   return projects;
 }
 
