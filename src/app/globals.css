@@ -823,54 +823,113 @@ body::after {
   inset: 0;
   z-index: 9998;
   pointer-events: none;
-  opacity: 0.45;
+  opacity: 0.35;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 200px 200px;
 }
 
 /* ═══════════════════════════════════════════
-   GEOMETRIC BG SHAPES (BuSung-inspired)
+   DOT GRID OVERLAY (tech aesthetic)
    ═══════════════════════════════════════════ */
 
-.bg-shape,
-.bg-shape-2,
-.bg-shape-3 {
+.dot-grid-overlay {
   position: fixed;
-  pointer-events: none;
+  inset: 0;
   z-index: 0;
-  filter: blur(1px);
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: radial-gradient(circle, var(--color-text) 0.5px, transparent 0.5px);
+  background-size: 24px 24px;
 }
 
-.bg-shape {
-  top: 80px;
-  right: clamp(-132px, -7vw, -40px);
-  width: min(34vw, 420px);
-  height: min(34vw, 420px);
-  background: var(--color-primary-dim);
+[data-mode="light"] .dot-grid-overlay {
+  opacity: 0.025;
+}
+
+/* ═══════════════════════════════════════════
+   AURORA BACKGROUND (animated gradient mesh)
+   ═══════════════════════════════════════════ */
+
+.aurora-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.aurora-blob {
+  position: absolute;
   border-radius: 50%;
-  opacity: 0.7;
+  filter: blur(80px);
+  will-change: transform;
 }
 
-.bg-shape-2 {
-  left: clamp(-96px, -5vw, -24px);
-  bottom: 44px;
-  width: min(42vw, 520px);
-  height: min(24vw, 280px);
-  background: rgba(192, 132, 252, 0.06);
-  border-radius: 999px;
-  opacity: 0.65;
+.aurora-blob-1 {
+  width: min(40vw, 500px);
+  height: min(40vw, 500px);
+  top: -10%;
+  right: -8%;
+  background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  animation: aurora-float-1 18s ease-in-out infinite;
 }
 
-.bg-shape-3 {
-  top: 50%;
-  left: 40%;
-  width: min(20vw, 240px);
-  height: min(20vw, 240px);
-  background: rgba(56, 189, 248, 0.04);
-  border-radius: 50%;
-  opacity: 0.5;
+.aurora-blob-2 {
+  width: min(35vw, 450px);
+  height: min(35vw, 450px);
+  bottom: -5%;
+  left: -5%;
+  background: color-mix(in srgb, var(--color-violet) 8%, transparent);
+  animation: aurora-float-2 22s ease-in-out infinite;
 }
+
+.aurora-blob-3 {
+  width: min(25vw, 300px);
+  height: min(25vw, 300px);
+  top: 40%;
+  left: 35%;
+  background: color-mix(in srgb, var(--color-cyan) 6%, transparent);
+  animation: aurora-float-3 15s ease-in-out infinite;
+}
+
+.aurora-blob-4 {
+  width: min(20vw, 250px);
+  height: min(20vw, 250px);
+  top: 20%;
+  left: -10%;
+  background: color-mix(in srgb, var(--color-green) 5%, transparent);
+  animation: aurora-float-4 20s ease-in-out infinite;
+}
+
+@keyframes aurora-float-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(-30px, 40px) scale(1.1); }
+  50% { transform: translate(20px, 60px) scale(0.95); }
+  75% { transform: translate(-20px, 20px) scale(1.05); }
+}
+
+@keyframes aurora-float-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(40px, -30px) scale(1.08); }
+  66% { transform: translate(-30px, -20px) scale(0.92); }
+}
+
+@keyframes aurora-float-3 {
+  0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+  50% { transform: translate(50px, -40px) scale(1.15) rotate(10deg); }
+}
+
+@keyframes aurora-float-4 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  40% { transform: translate(30px, 30px) scale(1.1); }
+  80% { transform: translate(-20px, 10px) scale(0.9); }
+}
+
+[data-mode="light"] .aurora-blob { filter: blur(100px); }
+
+/* Keep old shape classes for any external refs (empty now) */
+.bg-shape, .bg-shape-2, .bg-shape-3 { display: none; }
 
 /* ═══════════════════════════════════════════
    CUSTOM SCROLLBAR
@@ -894,7 +953,7 @@ body::after {
 }
 
 /* ═══════════════════════════════════════════
-   SCROLL PROGRESS BAR
+   SCROLL PROGRESS BAR (enhanced glow)
    ═══════════════════════════════════════════ */
 
 .scroll-progress-bar {
@@ -903,9 +962,17 @@ body::after {
   left: 0;
   height: 2px;
   z-index: 10000;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-cyan), var(--color-violet));
-  box-shadow: 0 0 12px color-mix(in srgb, var(--color-primary) 60%, transparent);
+  background: linear-gradient(90deg, var(--color-primary), var(--color-cyan), var(--color-violet), var(--color-primary));
+  background-size: 300% 100%;
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-primary) 50%, transparent),
+              0 0 20px color-mix(in srgb, var(--color-primary) 20%, transparent);
   transition: width 0.1s linear;
+  animation: progress-gradient-move 4s linear infinite;
+}
+
+@keyframes progress-gradient-move {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 300% 0%; }
 }
 
 /* ═══════════════════════════════════════════
@@ -919,16 +986,17 @@ body::after {
   right: 0;
   height: var(--nav-h);
   z-index: 100;
-  backdrop-filter: blur(20px) saturate(1.3);
-  -webkit-backdrop-filter: blur(20px) saturate(1.3);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
   background: var(--nav-bg, rgba(12, 14, 20, 0.5));
   border-bottom: 1px solid transparent;
-  transition: background-color var(--dur-m1) var(--ease-emphasized), border-color var(--dur-m1) var(--ease-emphasized);
+  transition: background-color var(--dur-m1) var(--ease-emphasized), border-color var(--dur-m1) var(--ease-emphasized), box-shadow var(--dur-m1) var(--ease-emphasized);
 }
 
 .nav-glass.scrolled {
   background: var(--nav-bg, rgba(12, 14, 20, 0.85));
   border-bottom-color: var(--color-border);
+  box-shadow: 0 1px 12px color-mix(in srgb, var(--color-bg) 30%, transparent);
 }
 
 .nav-glass:not(.scrolled) {
@@ -951,12 +1019,13 @@ body::after {
   font-family: var(--font-mono);
   font-size: 0.78rem;
   color: var(--color-text-sec);
-  transition: color var(--dur-s2) var(--spring-interactive), background-color var(--dur-s2) var(--spring-interactive);
+  transition: color var(--dur-s2) var(--spring-interactive), background-color var(--dur-s2) var(--spring-interactive), transform var(--dur-s2) var(--spring-interactive);
 }
 
 .nav-link:hover {
   color: var(--color-text);
   background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+  transform: translateY(-1px);
 }
 
 .nav-lang-btn {
@@ -1052,7 +1121,7 @@ body::after {
   transition-duration: 0ms;
 }
 /* ═══════════════════════════════════════════
-   HERO STYLES
+   HERO STYLES (upgraded)
    ═══════════════════════════════════════════ */
 
 .hero-tag {
@@ -1076,6 +1145,7 @@ body::after {
   border-radius: 50%;
   background: var(--color-primary);
   animation: pulse-dot 2s ease-in-out infinite;
+  box-shadow: 0 0 6px var(--color-primary);
 }
 
 .hero-title {
@@ -1085,6 +1155,46 @@ body::after {
   line-height: 1.05;
   letter-spacing: -1.5px;
   color: var(--color-text);
+}
+
+/* Hero entrance stagger animations */
+.hero-entrance-1 {
+  animation: hero-fade-up 0.6s var(--ease-emphasized-decel) 0.1s both;
+}
+.hero-entrance-2 {
+  animation: hero-fade-up 0.6s var(--ease-emphasized-decel) 0.2s both;
+}
+.hero-entrance-3 {
+  animation: hero-fade-up 0.6s var(--ease-emphasized-decel) 0.35s both;
+}
+.hero-entrance-4 {
+  animation: hero-fade-up 0.6s var(--ease-emphasized-decel) 0.5s both;
+}
+.hero-entrance-5 {
+  animation: hero-fade-up 0.6s var(--ease-emphasized-decel) 0.65s both;
+}
+
+@keyframes hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Hero terminal floating animation */
+.hero-terminal-float {
+  animation: terminal-float 6s ease-in-out infinite;
+}
+
+@keyframes terminal-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(0.5deg); }
 }
 
 /* ═══════════════════════════════════════════
@@ -1260,7 +1370,7 @@ body::after {
 }
 
 /* ═══════════════════════════════════════════
-   SECTION DIVIDER
+   SECTION DIVIDER (animated gradient)
    ═══════════════════════════════════════════ */
 
 .section-divider {
@@ -1268,7 +1378,17 @@ body::after {
   height: 1px;
   max-width: 80px;
   margin: 3rem auto;
-  background: var(--color-border);
+  background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+  opacity: 0.4;
+}
+
+/* Wide variant for page dividers */
+.section-divider-wide {
+  position: relative;
+  height: 1px;
+  max-width: 200px;
+  margin: 3.5rem auto;
+  background: linear-gradient(90deg, transparent, var(--color-border-hover), transparent);
 }
 
 /* ═══════════════════════════════════════════
@@ -1377,7 +1497,7 @@ body::after {
 }
 
 /* ═══════════════════════════════════════════
-   TERMINAL WINDOW
+   TERMINAL WINDOW (enhanced)
    ═══════════════════════════════════════════ */
 
 .terminal-window {
@@ -1386,13 +1506,23 @@ body::after {
   border-radius: var(--radius);
   border: 1px solid var(--color-border);
   background: var(--color-card);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35),
+              0 0 40px color-mix(in srgb, var(--color-primary) 5%, transparent);
   overflow: hidden;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .terminal-top-border {
   height: 2px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-cyan));
+  background: linear-gradient(90deg, var(--color-primary), var(--color-cyan), var(--color-violet));
+  background-size: 200% 100%;
+  animation: terminal-gradient-shift 6s ease infinite;
+}
+
+@keyframes terminal-gradient-shift {
+  0%, 100% { background-position: 0% 0%; }
+  50% { background-position: 100% 0%; }
 }
 
 .terminal-dots {
@@ -1435,7 +1565,7 @@ body::after {
   border-radius: 50%;
   background: var(--color-primary);
   border: 2px solid var(--color-bg);
-  box-shadow: 0 0 6px color-mix(in srgb, var(--color-primary) 30%, transparent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-primary) 30%, transparent);
 }
 
 .timeline-number {
@@ -1606,7 +1736,36 @@ body::after {
 }
 
 /* ═══════════════════════════════════════════
-   FOOTER
+   3D CARD TILT EFFECT
+   ═══════════════════════════════════════════ */
+
+.tilt-card {
+  transform-style: preserve-3d;
+  perspective: 800px;
+  transition: transform var(--dur-s3) var(--spring-interactive);
+}
+
+.tilt-card:hover {
+  box-shadow:
+    0 1px 2px 0px color-mix(in srgb, var(--md-shadow-color) 30%, transparent),
+    0 4px 8px 3px color-mix(in srgb, var(--md-shadow-color) 15%, transparent),
+    0 0 30px color-mix(in srgb, var(--color-primary) 6%, transparent);
+}
+
+/* ═══════════════════════════════════════════
+   GLOW ACCENTS
+   ═══════════════════════════════════════════ */
+
+.glow-primary {
+  box-shadow: 0 0 20px color-mix(in srgb, var(--color-primary) 12%, transparent);
+}
+
+.glow-text {
+  text-shadow: 0 0 20px color-mix(in srgb, var(--color-primary) 20%, transparent);
+}
+
+/* ═══════════════════════════════════════════
+   FOOTER (enhanced)
    ═══════════════════════════════════════════ */
 
 .footer-blur-top {
@@ -1621,13 +1780,20 @@ body::after {
   left: 0;
   right: 0;
   height: 80px;
-  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--color-bg) 60%, transparent));
+  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--color-bg) 70%, transparent));
   filter: blur(4px);
   pointer-events: none;
 }
 
+/* Gradient border top on footer */
+.footer-gradient-border {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 5%, var(--color-primary) 30%, var(--color-cyan) 50%, var(--color-violet) 70%, transparent 95%);
+  opacity: 0.3;
+}
+
 /* ═══════════════════════════════════════════
-   SCROLL TO TOP
+   SCROLL TO TOP (enhanced glow)
    ═══════════════════════════════════════════ */
 
 .scroll-to-top-btn {
@@ -1644,7 +1810,7 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity var(--dur-m1) var(--spring-enter), transform var(--dur-s2) var(--spring-interactive), background var(--dur-s2) var(--spring-interactive), border-color var(--dur-s2) var(--spring-interactive);
+  transition: opacity var(--dur-m1) var(--spring-enter), transform var(--dur-s2) var(--spring-interactive), background var(--dur-s2) var(--spring-interactive), border-color var(--dur-s2) var(--spring-interactive), box-shadow var(--dur-s2) var(--spring-interactive);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
@@ -1653,10 +1819,11 @@ body::after {
   transform: translateY(-3px) scale(1.08);
   background: color-mix(in srgb, var(--color-primary) 22%, transparent);
   border-color: color-mix(in srgb, var(--color-primary) 45%, transparent);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--color-primary) 15%, transparent);
 }
 
 /* ═══════════════════════════════════════════
-   SCROLL REVEAL
+   SCROLL REVEAL (enhanced variants)
    ═══════════════════════════════════════════ */
 
 .scroll-reveal {
@@ -1668,6 +1835,44 @@ body::after {
 .scroll-reveal.revealed {
   opacity: 1;
   transform: translateY(0) scale(1);
+}
+
+/* Slide from left variant */
+.scroll-reveal-left {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: opacity var(--dur-l1) var(--ease-emphasized-decel), transform var(--dur-l1) var(--spring-enter);
+}
+
+.scroll-reveal-left.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Scale-up variant */
+.scroll-reveal-scale {
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity var(--dur-l1) var(--ease-emphasized-decel), transform var(--dur-l1) var(--spring-enter);
+}
+
+.scroll-reveal-scale.revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Blur-in variant */
+.scroll-reveal-blur {
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(16px);
+  transition: opacity var(--dur-xl) var(--ease-emphasized-decel), filter var(--dur-xl) var(--ease-emphasized-decel), transform var(--dur-l1) var(--spring-enter);
+}
+
+.scroll-reveal-blur.revealed {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
 }
 
 /* ═══════════════════════════════════════════

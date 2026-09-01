@@ -8,7 +8,7 @@ export function SectionHeading({
   return (
     <div className="mb-10">
       <p className="section-kicker">{kicker}</p>
-      <h1 className="section-title">{title}</h1>
+      <h1 className="gradient-text section-title">{title}</h1>
     </div>
   );
 }

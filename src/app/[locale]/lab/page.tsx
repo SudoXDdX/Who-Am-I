@@ -36,6 +36,8 @@ export default async function LabPage({
           </ScrollReveal>
         ))}
       </div>
+
+      <div className="mt-16" aria-hidden="true" />
     </div>
   );
 }

@@ -109,7 +109,7 @@ export default async function ProjectDetailPage({
         </ScrollReveal>
       )}
 
-      <div className="section-divider mt-10" aria-hidden="true" />
+      <div className="section-divider-wide mt-10" aria-hidden="true" />
 
       <div className="mt-8 space-y-10">
         {storySections.map((section, index) => (

@@ -17,7 +17,7 @@ export function Footer({ locale }: { locale: Locale }) {
 
   return (
     <footer className="footer-blur-top relative z-[2]">
-      <div className="mx-auto border-t border-[var(--color-border)]" />
+      <div className="footer-gradient-border" aria-hidden="true" />
       <div className="mx-auto max-w-[1080px] px-6 pb-8 pt-12">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {/* Column 1: Brand */}

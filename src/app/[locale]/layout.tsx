@@ -65,10 +65,15 @@ export default async function LocaleLayout({
 
   return (
     <div lang={locale === "pt" ? "pt-BR" : "en"} className="flex min-h-screen flex-col">
-      {/* BG Shapes */}
-      <div className="bg-shape" aria-hidden="true" />
-      <div className="bg-shape-2" aria-hidden="true" />
-      <div className="bg-shape-3" aria-hidden="true" />
+      {/* Aurora Background */}
+      <div className="aurora-bg" aria-hidden="true">
+        <div className="aurora-blob aurora-blob-1" />
+        <div className="aurora-blob aurora-blob-2" />
+        <div className="aurora-blob aurora-blob-3" />
+        <div className="aurora-blob aurora-blob-4" />
+      </div>
+      {/* Dot Grid Overlay */}
+      <div className="dot-grid-overlay" aria-hidden="true" />
       <CustomCursor />
       <Ripple />
       <ScrollProgress />

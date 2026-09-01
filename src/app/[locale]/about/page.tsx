@@ -23,13 +23,13 @@ export default async function AboutPage({
 
   return (
     <div className="page-content">
-      <ScrollReveal>
+      <div className="hero-entrance-1">
         <SectionHeading kicker={dict.about.kicker} title={dict.about.title} />
-      </ScrollReveal>
+      </div>
 
-      <ScrollReveal delay={100}>
+      <div className="hero-entrance-2">
         <p className="text-lg leading-relaxed text-[var(--color-text)]">{dict.about.intro}</p>
-      </ScrollReveal>
+      </div>
 
       <div className="prose-body mt-8 text-[var(--color-text-sec)]">
         {dict.about.body.map((paragraph, index) => (
@@ -39,7 +39,7 @@ export default async function AboutPage({
         ))}
       </div>
 
-      <div className="section-divider" aria-hidden="true" />
+      <div className="section-divider-wide" aria-hidden="true" />
 
       <ScrollReveal>
         <h2 className="section-title text-2xl">{dict.about.valuesTitle}</h2>
@@ -52,7 +52,10 @@ export default async function AboutPage({
               <div className="flex items-center gap-3">
                 <span
                   className="h-3 w-3 rounded-full"
-                  style={{ background: valueColors[index] || "var(--color-primary)" }}
+                  style={{ 
+                    background: valueColors[index] || "var(--color-primary)",
+                    boxShadow: `0 0 8px ${valueColors[index] || "var(--color-primary)"}`,
+                  }}
                   aria-hidden="true"
                 />
                 <h3 className="font-semibold text-[var(--color-text)]">{value.title}</h3>

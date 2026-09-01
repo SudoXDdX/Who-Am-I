@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import { TypeWriter } from "@/components/TypeWriter";
 import { NeonCard } from "@/components/NeonCard";
 import { ScrollReveal } from "@/components/ScrollReveal";
+import { TerminalPrompt } from "@/components/TerminalPrompt";
 
 export function generateStaticParams() {
   return localeParams();
@@ -71,20 +72,25 @@ export default async function HomePage({
     <>
       {/* ═══ HERO ═══ */}
       <section className="relative z-[2] overflow-hidden px-6 pb-20 pt-32 sm:pb-28 sm:pt-40">
-        <div className="relative z-[2] mx-auto max-w-[1080px]">
+        <div className="mx-auto grid max-w-[1080px] gap-12 lg:grid-cols-[1fr_320px] lg:gap-16">
+          {/* Left: Text content with entrance animations */}
           <div className="max-w-2xl">
-            <span className="hero-tag">
-              <span className="hero-tag-dot" aria-hidden="true" />
-              {dict.home.kicker}
-            </span>
+            <div className="hero-entrance-1">
+              <span className="hero-tag">
+                <span className="hero-tag-dot" aria-hidden="true" />
+                {dict.home.kicker}
+              </span>
+            </div>
 
-            <h1 className="hero-title mt-6">{dict.home.title}</h1>
+            <h1 className="hero-title hero-entrance-2 mt-6">
+              {dict.home.title}
+            </h1>
 
-            <p className="mt-6 text-lg leading-relaxed text-[var(--color-text-sec)] sm:text-xl">
+            <div className="hero-entrance-3 mt-6 text-lg leading-relaxed text-[var(--color-text-sec)] sm:text-xl">
               <TypeWriter text={dict.home.lede} speed={25} />
-            </p>
+            </div>
 
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="hero-entrance-4 mt-8 flex flex-wrap gap-3">
               <Link href={`/${locale}/about/`} className="btn-primary">
                 <span className="material-symbols-outlined" style={{ fontSize: 16 }}>explore</span>
                 {dict.home.cta}
@@ -94,13 +100,20 @@ export default async function HomePage({
               </Link>
             </div>
 
-            <div className="hero-stats">
+            <div className="hero-entrance-5 hero-stats mt-10">
               {stats.map((stat) => (
                 <div key={stat.label} className="stat-card">
                   <div className="stat-card-value">{stat.value}</div>
                   <div className="stat-card-label">{stat.label}</div>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Right: Terminal with floating animation */}
+          <div className="hidden lg:block">
+            <div className="hero-terminal-float">
+              <TerminalPrompt lines={dict.home.prompt} />
             </div>
           </div>
         </div>
@@ -115,7 +128,7 @@ export default async function HomePage({
           {cards.map((card, index) => (
             <ScrollReveal key={card.href} delay={index * 100}>
               <Link href={card.href} className="group block">
-                <NeonCard className="flex h-full flex-col justify-between gap-4 p-7">
+                <NeonCard className="tilt-card flex h-full flex-col justify-between gap-4 p-7">
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <h2 className="project-card-title text-base">
