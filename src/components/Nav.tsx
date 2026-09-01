@@ -6,6 +6,7 @@ import type { Locale } from "@/lib/i18n";
 import { otherLocale } from "@/lib/i18n";
 import { getDictionary } from "@/content/dictionary";
 import { ThemeToggle } from "./ThemeToggle";
+import { CursorSelector } from "./CursorSelector";
 
 export function Nav({ locale }: { locale: Locale }) {
   const dict = getDictionary(locale);
@@ -77,6 +78,7 @@ export function Nav({ locale }: { locale: Locale }) {
             </Link>
           ))}
           <div className="ml-2 flex items-center gap-1.5">
+            <CursorSelector locale={locale} />
             <ThemeToggle locale={locale} />
             <Link href={`/${alt}/`} aria-label={dict.nav.langSwitchAria} className="nav-lang-btn">
               <span className="material-symbols-outlined" style={{ fontSize: 14 }}>
@@ -128,7 +130,8 @@ export function Nav({ locale }: { locale: Locale }) {
                 </span>
                 {dict.nav.langLabel}
               </Link>
-              <div className="flex items-center justify-center py-2">
+              <div className="flex items-center justify-center gap-2 py-2">
+                <CursorSelector locale={locale} />
                 <ThemeToggle locale={locale} />
               </div>
             </nav>

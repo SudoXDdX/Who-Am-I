@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 
-type ColorScheme = "blue" | "pink" | "green" | "black" | "white";
+type ColorScheme = "blue" | "pink" | "green" | "black" | "white" | "red" | "cyan" | "purple";
 type ColorMode = "dark" | "light";
 
 const COLOR_LABELS: Record<ColorScheme, { pt: string; en: string }> = {
@@ -11,6 +11,9 @@ const COLOR_LABELS: Record<ColorScheme, { pt: string; en: string }> = {
   green: { pt: "Verde", en: "Green" },
   black: { pt: "Preto", en: "Black" },
   white: { pt: "Branco", en: "White" },
+  red: { pt: "Vermelho", en: "Red" },
+  cyan: { pt: "Ciano", en: "Cyan" },
+  purple: { pt: "Roxo", en: "Purple" },
 };
 
 const COLOR_DOTS: Record<ColorScheme, string> = {
@@ -19,6 +22,9 @@ const COLOR_DOTS: Record<ColorScheme, string> = {
   green: "#1aa64a",
   black: "#5e5e5e",
   white: "#e3e3e3",
+  red: "#ff5252",
+  cyan: "#38bdf8",
+  purple: "#a855f7",
 };
 
 function getInitialTheme(): { mode: ColorMode; color: ColorScheme } {

@@ -7,6 +7,7 @@ import { Footer } from "@/components/Footer";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { CustomCursor } from "@/components/CustomCursor";
+import { WallpaperEngine } from "@/components/WallpaperEngine";
 import { Ripple } from "@/components/Ripple";
 
 export function generateStaticParams() {
@@ -65,15 +66,8 @@ export default async function LocaleLayout({
 
   return (
     <div lang={locale === "pt" ? "pt-BR" : "en"} className="flex min-h-screen flex-col">
-      {/* Aurora Background */}
-      <div className="aurora-bg" aria-hidden="true">
-        <div className="aurora-blob aurora-blob-1" />
-        <div className="aurora-blob aurora-blob-2" />
-        <div className="aurora-blob aurora-blob-3" />
-        <div className="aurora-blob aurora-blob-4" />
-      </div>
-      {/* Dot Grid Overlay */}
-      <div className="dot-grid-overlay" aria-hidden="true" />
+      {/* Wallpaper Background */}
+      <WallpaperEngine />
       <CustomCursor />
       <Ripple />
       <ScrollProgress />
