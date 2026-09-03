@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Google Sans Flex", system-ui, -apple-system, sans-serif;
-  --font-heading: "Google Sans Flex", system-ui, -apple-system, sans-serif;
+  --font-sans: "Google Sans Flex", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-heading: "Google Sans Flex", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", "Cascadia Code", monospace;
 
   /* Fallbacks — overridden by theme selectors below */
@@ -1725,8 +1725,8 @@ body::after {
   right: 0;
   height: var(--nav-h);
   z-index: 100;
-  backdrop-filter: blur(24px) saturate(1.4);
-  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
   background: var(--nav-bg, rgba(12, 14, 20, 0.5));
   border-bottom: 1px solid transparent;
   transition: background-color var(--dur-m1) var(--ease-emphasized), border-color var(--dur-m1) var(--ease-emphasized), box-shadow var(--dur-m1) var(--ease-emphasized);
@@ -3398,8 +3398,8 @@ body::after {
 /* Glassmorphism variant for stat cards */
 .stat-card-glass {
   background: color-mix(in srgb, var(--color-card) 60%, transparent);
-  backdrop-filter: blur(16px) saturate(1.2);
-  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  backdrop-filter: blur(10px) saturate(1.1);
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
   border: 1px solid color-mix(in srgb, var(--color-border) 50%, transparent);
 }
 
@@ -3867,6 +3867,69 @@ body::after {
 .sonic-wave-cursor.cursor-hover .sonic-dot { width: 6px; height: 6px; }
 .sonic-wave-cursor.cursor-clicking .sonic-dot { transform: translate(-50%, -50%) scale(2); transition-duration: 80ms; }
 
+/* ═══════════════════════════════════════════
+   CLASSIC CROSS CURSOR — Original v1 / Jalep style
+   Simple crosshair + center dot, no particles, no ring
+   ═══════════════════════════════════════════ */
+
+.classic-cross-cursor {
+  position: fixed;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+}
+
+.classic-h {
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  right: 3px;
+  height: 1px;
+  background: var(--color-text);
+  opacity: 0.8;
+  transform: translateY(-50%);
+}
+
+.classic-v {
+  position: absolute;
+  left: 50%;
+  top: 3px;
+  bottom: 3px;
+  width: 1px;
+  background: var(--color-text);
+  opacity: 0.8;
+  transform: translateX(-50%);
+}
+
+.classic-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 4px var(--color-primary);
+}
+
+.classic-cross-cursor.cursor-hover .classic-dot {
+  width: 6px;
+  height: 6px;
+}
+
+.classic-cross-cursor.cursor-hover .classic-h,
+.classic-cross-cursor.cursor-hover .classic-v {
+  opacity: 0.4;
+}
+
+.classic-cross-cursor.cursor-clicking .classic-dot {
+  transform: translate(-50%, -50%) scale(1.8);
+  transition-duration: 80ms;
+}
+
 /* Add new cursor types to touch-device hide list */
 @media (hover: none) and (pointer: coarse) {
   .glitch-trail-cursor,
@@ -3874,7 +3937,8 @@ body::after {
   .flame-cursor,
   .ice-crystal-cursor,
   .star-field-cursor,
-  .sonic-wave-cursor {
+  .sonic-wave-cursor,
+  .classic-cross-cursor {
     display: none !important;
   }
 }
@@ -4510,8 +4574,8 @@ body::after { z-index: 9998; }
 }
 
 .nav-mobile-panel {
-  backdrop-filter: blur(32px) saturate(1.4) !important;
-  -webkit-backdrop-filter: blur(32px) saturate(1.4) !important;
+  backdrop-filter: blur(20px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.2) !important;
 }
 
 /* ═══════════════════════════════════════════

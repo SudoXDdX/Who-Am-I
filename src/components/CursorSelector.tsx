@@ -232,6 +232,14 @@ function CursorPreview({ id }: { id: string }) {
           </circle>
         </svg>
       );
+    case 'classic-cross':
+      return (
+        <svg {...s} viewBox="0 0 14 14">
+          <line x1="4" y1="7" x2="10" y2="7" stroke={tc} strokeWidth="1" />
+          <line x1="7" y1="4" x2="7" y2="10" stroke={tc} strokeWidth="1" />
+          <circle cx="7" cy="7" r="1" fill={pc} />
+        </svg>
+      );
     default:
       return null;
   }

@@ -20,6 +20,7 @@ export const CURSOR_TYPES = [
   { id: 'ice-crystal', label: { pt: 'Ice Crystal', en: 'Ice Crystal' } },
   { id: 'star-field', label: { pt: 'Star Field', en: 'Star Field' } },
   { id: 'sonic-wave', label: { pt: 'Sonic Wave', en: 'Sonic Wave' } },
+  { id: 'classic-cross', label: { pt: 'Classic Cross', en: 'Classic Cross' } },
 ] as const;
 
 export type CursorType = (typeof CURSOR_TYPES)[number]['id'];
@@ -58,6 +59,7 @@ function getCursorClass(type: CursorType): string {
     case 'ice-crystal': return 'ice-crystal-cursor';
     case 'star-field': return 'star-field-cursor';
     case 'sonic-wave': return 'sonic-wave-cursor';
+    case 'classic-cross': return 'classic-cross-cursor';
     default: return 'phantom-cursor';
   }
 }
@@ -245,6 +247,11 @@ export function CustomCursor() {
       }
 
       // Spawn trail particles (reduced rate for perf)
+      // Skip particles for classic-cross (no trail)
+      if (ct === 'classic-cross') {
+        rafRef.current = requestAnimationFrame(animate);
+        return;
+      }
       const now = performance.now();
       const spawnThreshold = ct === 'pixel-arrow' ? 50 : ct === 'void-dot' ? 40 : 60;
       const speedThreshold = ct === 'void-dot' ? 1.2 : 2.5;
@@ -412,6 +419,14 @@ export function CustomCursor() {
             <div className="sonic-ring sonic-ring-2" />
             <div className="sonic-ring sonic-ring-3" />
             <div className="sonic-dot" />
+          </>
+        );
+      case 'classic-cross':
+        return (
+          <>
+            <div className="classic-h" />
+            <div className="classic-v" />
+            <div className="classic-dot" />
           </>
         );
       default:
